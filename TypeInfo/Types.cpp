@@ -23,7 +23,7 @@ map<Type, string> TypeStr = {
 	{ DRAGON, "Dragon" },
 	{ DARK, "Dark" },
 	{ FAIRY, "Fairy" },
-	{ NONE, " " }
+	{ NONE, "" }
 };
 
 
