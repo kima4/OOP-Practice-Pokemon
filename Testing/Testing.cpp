@@ -1,8 +1,11 @@
 #include <iostream>
+#include <tuple>
 
 #include "Testing.h"
 #include "../TypeInfo/Types.h"
 #include "../TypeInfo/TypeInteractions.h"
+#include "../PokemonInfo/PokemonDatabase.h"
+#include "../PokemonInfo/PokemonSpecies.h"
 
 
 
@@ -88,6 +91,33 @@ void MagnemiteWeaknesses() {
 	IS_TRUE(result.at(POISON) == expectedPoison);
 }
 
+//--------------------- PokemonInfo Tests ---------------------//
+
+// creating bulbasaur and getting species
+void BulbasaurSpecies() {
+	PokemonSpecies* bulbasaur = new PokemonSpecies(1, "Bulbasaur", GRASS, POISON, 45, 49, 49, 65, 65, 45, 1);
+	string result = bulbasaur->getSpecies();
+	string expected = "Bulbasaur";
+
+	IS_TRUE(result == expected);
+}
+
+// fetching wigglytuff from database and checking types
+void WigglytuffTypes() {
+	PokemonSpecies* wigglytuff = PokemonDatabase.at("Wigglytuff");
+	Type result1, result2;
+	tie(result1, result2) = wigglytuff->getTypes();
+
+	Type expected1 = NORMAL;
+	Type expected2 = FAIRY;
+
+	IS_TRUE(result1 == expected1);
+	IS_TRUE(result2 == expected2);
+}
+
+
+
+
 
 int main() {
 
@@ -102,6 +132,10 @@ int main() {
 	BulbasaurWeaknesses();
 	MagnemiteWeaknesses();
 
+	cout << "------------------ PokemonInfo Tests ------------------\n";
+
+	BulbasaurSpecies();
+	WigglytuffTypes();
 
 	return 0;
 }
