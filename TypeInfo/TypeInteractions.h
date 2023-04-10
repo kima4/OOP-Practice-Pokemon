@@ -9,6 +9,9 @@ extern map<Type, map<Type, double>> TypeChart;
 // gets the damage multiplier based on the given types
 double getMultiplier(Type attacker, Type defender);
 
+// gets the damage multiplier based on the given types
+double getMultiplier(Type attacker, Type defender1, Type defender2);
+
 // gets the damage multiplier list for the given types
 map<Type, double> getWeaknesses(Type type1, Type type2);
 

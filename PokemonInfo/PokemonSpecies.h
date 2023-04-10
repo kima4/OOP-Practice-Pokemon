@@ -3,6 +3,7 @@
 
 #include <string>
 #include <tuple>
+#include <map>
 
 #include "../TypeInfo/Types.h"
 
@@ -58,12 +59,7 @@ protected:
 	Type mType1;
 	Type mType2;
 
-	unsigned int mBaseHP;
-	unsigned int mBaseAtk;
-	unsigned int mBaseDef;
-	unsigned int mBaseSpAtk;
-	unsigned int mBaseSpDef;
-	unsigned int mBaseSpd;
+	map<string, int> mBaseStats;
 
 	int mGenderRatio;
 };

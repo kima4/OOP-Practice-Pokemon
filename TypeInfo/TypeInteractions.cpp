@@ -172,11 +172,14 @@ double getMultiplier(Type attacker, Type defender) {
 	return multiplier;
 }
 
+double getMultiplier(Type attacker, Type defender1, Type defender2) {
+	return getMultiplier(attacker, defender1) * getMultiplier(attacker, defender2);
+}
 
 map<Type, double> getWeaknesses(Type type1, Type type2) {
 	map<Type, double> weaknesses;
 	for (int i = NORMAL; i != NONE; i++) {
-		weaknesses[(Type)i] = getMultiplier((Type)i, type1) * getMultiplier((Type)i, type2);
+		weaknesses[(Type)i] = getMultiplier((Type)i, type1, type2);
 	}
 	return weaknesses;
 }
