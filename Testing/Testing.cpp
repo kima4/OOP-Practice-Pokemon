@@ -1,5 +1,7 @@
 #include <iostream>
 #include <tuple>
+#include <time.h>
+#include<cstdlib>
 
 #include "Testing.h"
 #include "../TypeInfo/Types.h"
@@ -7,6 +9,7 @@
 //#include "../PokemonInfo/PokemonDatabase.h"
 #include "../PokemonInfo/PokemonSpecies.h"
 #include "../PokemonInfo/Pokemon.h"
+#include "../MoveInfo/Move.h"
 
 
 
@@ -151,10 +154,33 @@ void PiloswineIndividual() {
 }
 
 
+//--------------------- MoveInfo Tests ---------------------//
+
+// creating tackle and getting name
+void CreateTackle() {
+	Move* tackle = new Move("Tackle");
+	string result = tackle->getMoveName();
+	string expected = "Tackle";
+	tackle->print();
+	IS_TRUE(result == expected);
+}
+
+// creating individual staryu and moves
+void StaryuMoves() {
+	Pokemon* staryu = new Pokemon("Staryu", 43);
+	Move* move1 = new Move("Water Gun");
+	staryu->setMove(move1, 0);
+	int result = staryu->getMove(0)->getBasePower();
+	int expected = 40;
+	staryu->print();
+	IS_TRUE(result == expected);
+}
 
 
 
 int main() {
+
+	srand(time(0));
 
 	cout << "------------------ TypeInfo Tests ------------------\n";
 
@@ -173,6 +199,11 @@ int main() {
 	WigglytuffTypes();
 	ArcanineStats();
 	PiloswineIndividual();
+
+	cout << "------------------ MoveInfo Tests ------------------\n";
+
+	CreateTackle();
+	StaryuMoves();
 
 	return 0;
 }

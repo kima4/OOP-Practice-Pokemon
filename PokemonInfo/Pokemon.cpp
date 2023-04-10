@@ -7,20 +7,28 @@
 #include "Pokemon.h"
 
 
-Pokemon::Pokemon(string species, int level) : Pokemon::Pokemon(species, level, species) {}
+Pokemon::Pokemon(string species, int level) : PokemonSpecies(species) {
+	setLevel(level);
+	setNickname(species);
+	initIVs();
+	initEVs();
+	initStats();
+	setCurrentHP(getStat(0));
+	initMoves();
+	refillMoves();
+}
 
-Pokemon::Pokemon(string species, int level, string nickname) : PokemonSpecies(species) {
+/*Pokemon::Pokemon(string species, int level, string nickname) : PokemonSpecies(species) {
 	setLevel(level);
 	setNickname(nickname);
 	initIVs();
 	initEVs();
 	initStats();
 	setCurrentHP(getStat(0));
-}
-
+}*/
 
 void Pokemon::initIVs() {
-	srand(time(0));
+	//srand(time(0));
 
 	for (int i = HP; i != NUM_STATS; i++) {
 		mIVs[i] = rand() % 32;
@@ -38,6 +46,16 @@ void Pokemon::initStats() {
 	for (int i = ATK; i != NUM_STATS; i++) {
 		mStats[i] = calcOtherStat(i);
 	}
+}
+
+void Pokemon::initMoves() {
+	Move* move1 = new Move("PLACEHOLDER");
+	Move* move2 = new Move("PLACEHOLDER");
+	Move* move3 = new Move("PLACEHOLDER");
+	Move* move4 = new Move("PLACEHOLDER");
+	Move* moves[4] = { move1, move2, move3, move4 };
+
+	setMoves(moves);
 }
 
 int Pokemon::getLevel() {
@@ -166,6 +184,44 @@ void Pokemon::setCurrentHP(int hp) {
 }
 
 
+Move* Pokemon::getMove(int moveSlot) {
+	return mMoves[moveSlot];
+}
+
+Move** Pokemon::getMoves() {
+	return mMoves;
+}
+
+void Pokemon::setMove(Move* move, int moveSlot) {
+	mMoves[moveSlot] = move;
+}
+
+void Pokemon::setMoves(Move* moves[4]) {
+	for (int i = 0; i < 4; i++) {
+		setMove(moves[i], i);
+	}
+}
+
+void Pokemon::refillMove(int moveSlot) {
+	int maxPP = mMoves[moveSlot]->getBasePP();
+	setMovePP(maxPP, moveSlot);
+}
+
+void Pokemon::refillMoves() {
+	for (int i = 0; i < 4; i++) {
+		refillMove(i);
+	}
+}
+
+int Pokemon::getMovePP(int moveSlot) {
+	return mMovePP[moveSlot];
+}
+
+void Pokemon::setMovePP(int pp, int moveSlot) {
+	mMovePP[moveSlot] = pp;
+}
+
+
 void Pokemon::print() {
 
 	cout << mNickname << '\n';
@@ -198,5 +254,10 @@ void Pokemon::print() {
 	cout << "    Spd: " << mStats[SPD] << '\n';
 
 	cout << "--------- Moves ---------\n";
-
+	for (int i = 0; i < 4; i++) {
+		mMoves[i]->print();
+		if (mMoves[i]->getMoveName() != "PLACEHOLDER") {
+			cout << "  Current PP: " << getMovePP(i) << '\n';
+		}
+	}
 }

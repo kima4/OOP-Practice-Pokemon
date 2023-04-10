@@ -15,11 +15,12 @@ public:
 
 	//constructors
 	Pokemon(string species, int level);
-	Pokemon(string species, int level, string nickname);
+	//Pokemon(string species, int level, string nickname);
 
 	void initIVs();
 	void initEVs();
 	void initStats();
+	void initMoves();
 
 	int getLevel();
 	void setLevel(int level);
@@ -64,6 +65,16 @@ public:
 	int getCurrentHP();
 	void setCurrentHP(int hp);
 
+	// moves
+	Move* getMove(int moveSlot);
+	Move** getMoves();
+	void setMove(Move* move, int moveSlot);
+	void setMoves(Move* moves[4]);
+	void refillMove(int moveSlot);
+	void refillMoves();
+	int getMovePP(int moveSlot);
+	void setMovePP(int pp, int moveSlot);
+
 	void print();
 
 private:
@@ -80,15 +91,9 @@ private:
 	int mStats[NUM_STATS];
 	int mCurrentHP;
 
-	Move* mMove1;
-	Move* mMove2;
-	Move* mMove3;
-	Move* mMove4;
-
-	int mMove1PP;
-	int mMove2PP;
-	int mMove3PP;
-	int mMove4PP;
+	// moves
+	Move* mMoves[4];
+	int mMovePP[4];
 
 };
 

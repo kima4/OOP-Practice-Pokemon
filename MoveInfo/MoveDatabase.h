@@ -9,6 +9,7 @@ using namespace std;
 
 
 map<string, tuple<int, int, int, Type, Category>> MoveData = {
+	{ "PLACEHOLDER", {-1, -1, -1, NONE, STATUS} },
 	{ "Pound", {40, 100, 35, NORMAL, PHYSICAL} },
 	{ "Karate Chop", {50, 100, 25, FIGHTING, PHYSICAL} },
 	{ "Double Slap", {15, 85, 10, NORMAL, PHYSICAL} },
