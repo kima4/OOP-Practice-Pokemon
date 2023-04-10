@@ -13,6 +13,12 @@ class PokemonSpecies {
 public:
 
 	// constructor
+	PokemonSpecies(string species);
+	void initTypes(string species);
+	void initStats(string species);
+
+
+	// constructor
 	PokemonSpecies(
 		int dexNum,
 		string species,
@@ -40,6 +46,11 @@ public:
 
 	// gets gender ratio
 	int getGenderRatio();
+
+	// setters
+	void setType1(Type type);
+	void setType2(Type type);
+
 
 protected:
 	unsigned int mDexNum;

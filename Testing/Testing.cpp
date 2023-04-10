@@ -4,7 +4,7 @@
 #include "Testing.h"
 #include "../TypeInfo/Types.h"
 #include "../TypeInfo/TypeInteractions.h"
-#include "../PokemonInfo/PokemonDatabase.h"
+//#include "../PokemonInfo/PokemonDatabase.h"
 #include "../PokemonInfo/PokemonSpecies.h"
 
 
@@ -95,7 +95,7 @@ void MagnemiteWeaknesses() {
 
 // creating bulbasaur and getting species
 void BulbasaurSpecies() {
-	PokemonSpecies* bulbasaur = new PokemonSpecies(1, "Bulbasaur", GRASS, POISON, 45, 49, 49, 65, 65, 45, 1);
+	PokemonSpecies* bulbasaur = new PokemonSpecies("Bulbasaur");
 	string result = bulbasaur->getSpecies();
 	string expected = "Bulbasaur";
 
@@ -104,7 +104,7 @@ void BulbasaurSpecies() {
 
 // fetching wigglytuff from database and checking types
 void WigglytuffTypes() {
-	PokemonSpecies* wigglytuff = PokemonDatabase.at("Wigglytuff");
+	PokemonSpecies* wigglytuff = new PokemonSpecies("Wigglytuff");
 	Type result1, result2;
 	tie(result1, result2) = wigglytuff->getTypes();
 
@@ -113,6 +113,31 @@ void WigglytuffTypes() {
 
 	IS_TRUE(result1 == expected1);
 	IS_TRUE(result2 == expected2);
+}
+
+// fetching arcanine from database and checking stats
+void ArcanineStats() {
+	PokemonSpecies* arcanine = new PokemonSpecies("Arcanine");
+	int resultHP = arcanine->getBaseHP();
+	int resultAtk = arcanine->getBaseAtk();
+	int resultDef = arcanine->getBaseDef();
+	int resultSpAtk = arcanine->getBaseSpAtk();
+	int resultSpDef = arcanine->getBaseSpDef();
+	int resultSpd = arcanine->getBaseSpd();
+
+	int expectedHP = 90;
+	int expectedAtk = 110;
+	int expectedDef = 80;
+	int expectedSpAtk = 100;
+	int expectedSpDef = 80;
+	int expectedSpd = 95;
+
+	IS_TRUE(resultHP == expectedHP);
+	IS_TRUE(resultAtk == expectedAtk);
+	IS_TRUE(resultDef == expectedDef);
+	IS_TRUE(resultSpAtk == expectedSpAtk);
+	IS_TRUE(resultSpDef == expectedSpDef);
+	IS_TRUE(resultSpd == expectedSpd);
 }
 
 
@@ -136,6 +161,7 @@ int main() {
 
 	BulbasaurSpecies();
 	WigglytuffTypes();
+	ArcanineStats();
 
 	return 0;
 }
