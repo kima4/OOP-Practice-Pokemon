@@ -6,6 +6,7 @@
 #include <map>
 
 #include "PokemonSpecies.h"
+#include "../MoveInfo/Move.h"
 
 using namespace std;
 
@@ -54,6 +55,7 @@ public:
 	void setEVs(int* evs);
 	void addEVs(int* evs);
 
+	// stats
 	int calcMaxHP();
 	int calcOtherStat(int stat);
 
@@ -77,6 +79,16 @@ private:
 	// stats
 	int mStats[NUM_STATS];
 	int mCurrentHP;
+
+	Move* mMove1;
+	Move* mMove2;
+	Move* mMove3;
+	Move* mMove4;
+
+	int mMove1PP;
+	int mMove2PP;
+	int mMove3PP;
+	int mMove4PP;
 
 };
 

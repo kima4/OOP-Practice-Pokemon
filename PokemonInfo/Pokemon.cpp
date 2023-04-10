@@ -196,4 +196,7 @@ void Pokemon::print() {
 	cout << "  SpAtk: " << mStats[SPATK] << '\n';
 	cout << "  SpDef: " << mStats[SPDEF] << '\n';
 	cout << "    Spd: " << mStats[SPD] << '\n';
+
+	cout << "--------- Moves ---------\n";
+
 }
