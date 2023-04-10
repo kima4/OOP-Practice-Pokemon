@@ -14,19 +14,11 @@ Pokemon::Pokemon(string species, int level) {
 	initIVs();
 	initEVs();
 	initStats();
-	setCurrentHP(getStat(0));
+	setCurrentHP(getStat(HP));
 	initMoves();
 	refillMoves();
+	resetStatChanges();
 }
-
-/*Pokemon::Pokemon(string species, int level, string nickname) : PokemonSpecies(species) {
-	setLevel(level);
-	setNickname(nickname);
-	initIVs();
-	initEVs();
-	initStats();
-	setCurrentHP(getStat(0));
-}*/
 
 void Pokemon::initIVs() {
 	//srand(time(0));
@@ -45,7 +37,7 @@ void Pokemon::initEVs() {
 void Pokemon::initStats() {
 	mStats[0] = calcMaxHP();
 	for (int i = ATK; i != NUM_STATS; i++) {
-		mStats[i] = calcOtherStat(i);
+		mStats[i] = calcOtherStat((Stat)i);
 	}
 }
 
@@ -165,14 +157,14 @@ int Pokemon::calcMaxHP() {
 	return maxHP + getLevel() + 10;
 }
 
-int Pokemon::calcOtherStat(int otherStat) {
+int Pokemon::calcOtherStat(Stat otherStat) {
 	int stat = mSpecies->getBaseStats()[otherStat] * 2 + getIVs()[otherStat] + (getEVs()[otherStat] / 4);
 	stat *= getLevel();
 	stat /= 100;
 	return stat + 5;
 }
 
-int Pokemon::getStat(int stat) {
+int Pokemon::getStat(Stat stat) {
 	return mStats[stat];
 }
 
@@ -184,6 +176,24 @@ void Pokemon::setCurrentHP(int hp) {
 	mCurrentHP = hp;
 }
 
+int Pokemon::getStatChange(Stat stat) {
+	return mStatChanges[stat];
+}
+
+void Pokemon::setStatChange(Stat stat, int change) {
+	mStatChanges[stat] = change;
+}
+
+void Pokemon::addStatChange(Stat stat, int change) {
+	int prevChange = getStatChange(stat);
+	setStatChange(stat, prevChange + change);
+}
+
+void Pokemon::resetStatChanges() {
+	for (int i = 1; i < NUM_STATS; i++) {
+		mStatChanges[i] = 0;
+	}
+}
 
 Move* Pokemon::getMove(int moveSlot) {
 	return mMoves[moveSlot];
@@ -248,11 +258,11 @@ void Pokemon::print() {
 
 	cout << "--------- Stats ---------\n";
 	cout << "     HP: " << getCurrentHP() << "/" << mStats[HP] << '\n';
-	cout << "    Atk: " << mStats[ATK] << '\n';
-	cout << "    Def: " << mStats[DEF] << '\n';
-	cout << "  SpAtk: " << mStats[SPATK] << '\n';
-	cout << "  SpDef: " << mStats[SPDEF] << '\n';
-	cout << "    Spd: " << mStats[SPD] << '\n';
+	cout << "    Atk: " << mStats[ATK] << " +" << mStatChanges[ATK] << '\n';
+	cout << "    Def: " << mStats[DEF] << " +" << mStatChanges[DEF] << '\n';
+	cout << "  SpAtk: " << mStats[SPATK] << " +" << mStatChanges[SPATK] << '\n';
+	cout << "  SpDef: " << mStats[SPDEF] << " +" << mStatChanges[SPDEF] << '\n';
+	cout << "    Spd: " << mStats[SPD] << " +" << mStatChanges[SPD] << '\n';
 
 	cout << "--------- Moves ---------\n";
 	for (int i = 0; i < 4; i++) {

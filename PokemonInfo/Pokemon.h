@@ -58,12 +58,17 @@ public:
 
 	// stats
 	int calcMaxHP();
-	int calcOtherStat(int stat);
+	int calcOtherStat(Stat stat);
 
-	int getStat(int stat);
+	int getStat(Stat stat);
 
 	int getCurrentHP();
 	void setCurrentHP(int hp);
+
+	int getStatChange(Stat stat);
+	void setStatChange(Stat stat, int change);
+	void addStatChange(Stat stat, int change);
+	void resetStatChanges();
 
 	// moves
 	Move* getMove(int moveSlot);
@@ -91,6 +96,7 @@ private:
 	// stats
 	int mStats[NUM_STATS];
 	int mCurrentHP;
+	int mStatChanges[NUM_STATS];
 
 	// moves
 	Move* mMoves[4];

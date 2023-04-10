@@ -5,8 +5,6 @@
 #include <map>
 #include <tuple>
 
-//#include "PokemonSpecies.h"
-
 using namespace std;
 
 map<string, tuple<Type, Type>> SpeciesTypes = {
