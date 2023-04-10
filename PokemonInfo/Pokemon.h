@@ -23,10 +23,10 @@ private:
 	unsigned int mLevel;
 
 	// ivs
-	map<string, int> mIVs;
+	int mIVs[6];
 
 	// evs
-	map<string, int> mEVs;
+	int mEVs[6];
 
 
 };

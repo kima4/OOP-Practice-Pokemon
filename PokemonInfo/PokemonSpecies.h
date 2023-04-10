@@ -19,6 +19,7 @@ public:
 	void initStats(string species);
 
 
+	/*
 	// constructor
 	PokemonSpecies(
 		int dexNum,
@@ -26,7 +27,7 @@ public:
 		Type type1, Type type2,
 		int baseHP, int baseAtk, int baseDef, int baseSpAtk, int baseSpDef, int baseSpd,
 		int genderRatio
-	);
+	);*/
 
 	// prints species information
 	void print();
@@ -59,7 +60,7 @@ protected:
 	Type mType1;
 	Type mType2;
 
-	map<string, int> mBaseStats;
+	int mBaseStats[6];
 
 	int mGenderRatio;
 };

@@ -21,12 +21,12 @@ void PokemonSpecies::initTypes(string species) {
 
 void PokemonSpecies::initStats(string species) {
 	tuple<int, int, int, int, int, int> stats = SpeciesStats.at(species);
-	mBaseStats["HP"] = get<0>(stats);
-	mBaseStats["Atk"] = get<1>(stats);
-	mBaseStats["Def"] = get<2>(stats);
-	mBaseStats["SpAtk"] = get<3>(stats);
-	mBaseStats["SpDef"] = get<4>(stats);
-	mBaseStats["Spd"] = get<5>(stats);
+	mBaseStats[0] = get<0>(stats);
+	mBaseStats[1] = get<1>(stats);
+	mBaseStats[2] = get<2>(stats);
+	mBaseStats[3] = get<3>(stats);
+	mBaseStats[4] = get<4>(stats);
+	mBaseStats[5] = get<5>(stats);
 }
 
 /*
@@ -57,22 +57,22 @@ tuple<Type, Type> PokemonSpecies::getTypes() {
 }
 
 int PokemonSpecies::getBaseHP() {
-	return mBaseStats.at("HP");
+	return mBaseStats[0];
 }
 int PokemonSpecies::getBaseAtk() {
-	return mBaseStats.at("Atk");
+	return mBaseStats[1];
 }
 int PokemonSpecies::getBaseDef() {
-	return mBaseStats.at("Def");
+	return mBaseStats[2];
 }
 int PokemonSpecies::getBaseSpAtk() {
-	return mBaseStats.at("SpAtk");
+	return mBaseStats[3];
 }
 int PokemonSpecies::getBaseSpDef() {
-	return mBaseStats.at("SpDef");
+	return mBaseStats[4];
 }
 int PokemonSpecies::getBaseSpd() {
-	return mBaseStats.at("Spd");
+	return mBaseStats[5];
 }
 
 int PokemonSpecies::getGenderRatio() {
