@@ -86,6 +86,7 @@ private:
 	PokemonSpecies* mSpecies;
 	unsigned int mLevel;
 	string mNickname;
+	int mGender;
 
 	// ivs
 	int mIVs[NUM_STATS];
