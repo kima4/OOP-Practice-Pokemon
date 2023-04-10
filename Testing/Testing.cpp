@@ -177,7 +177,6 @@ void StaryuMoves() {
 }
 
 
-
 int main() {
 
 	srand(time(0));
@@ -204,6 +203,7 @@ int main() {
 
 	CreateTackle();
 	StaryuMoves();
+
 
 	return 0;
 }

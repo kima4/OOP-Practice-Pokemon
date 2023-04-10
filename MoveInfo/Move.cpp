@@ -54,6 +54,10 @@ Category Move::getCategory() {
 	return mCategory;
 }
 
+void Move::test(int val){
+	mBasePower = val;
+}
+
 void Move::print() {
 	if (getMoveName() != "PLACEHOLDER") {
 		cout << getMoveName() << '\n';

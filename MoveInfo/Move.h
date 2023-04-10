@@ -13,6 +13,7 @@ extern map<Category, string> CategoryStr;
 
 string getCategoryString(Category category);
 
+
 class Move {
 public:
 	Move(string name);
@@ -25,6 +26,8 @@ public:
 
 	Type getType();
 	Category getCategory();
+
+	void test(int val);
 
 	void print();
 
@@ -42,12 +45,5 @@ private:
 
 
 };
-
-
-
-
-
-
-
 
 #endif

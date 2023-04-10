@@ -5,9 +5,10 @@
 #include <cstdlib>
 
 #include "Pokemon.h"
+#include "PokemonList.h"
 
-
-Pokemon::Pokemon(string species, int level) : PokemonSpecies(species) {
+Pokemon::Pokemon(string species, int level) {
+	mSpecies = SpeciesList.at(species);
 	setLevel(level);
 	setNickname(species);
 	initIVs();
@@ -158,14 +159,14 @@ void Pokemon::addEVs(int* evs) {
 
 
 int Pokemon::calcMaxHP() {
-	int maxHP = getBaseHP() * 2 + getIVHP() + (getEVHP() / 4);
+	int maxHP = mSpecies->getBaseHP() * 2 + getIVHP() + (getEVHP() / 4);
 	maxHP *= getLevel();
 	maxHP /= 100;
 	return maxHP + getLevel() + 10;
 }
 
 int Pokemon::calcOtherStat(int otherStat) {
-	int stat = getBaseStats()[otherStat] * 2 + getIVs()[otherStat] + (getEVs()[otherStat] / 4);
+	int stat = mSpecies->getBaseStats()[otherStat] * 2 + getIVs()[otherStat] + (getEVs()[otherStat] / 4);
 	stat *= getLevel();
 	stat /= 100;
 	return stat + 5;
@@ -227,7 +228,7 @@ void Pokemon::print() {
 	cout << mNickname << '\n';
 	cout << "Level " << mLevel << '\n';
 
-	PokemonSpecies::print();
+	mSpecies->print();
 
 	cout << "--------- IVs ---------\n";
 	cout << "     HP: " << mIVs[HP] << '\n';

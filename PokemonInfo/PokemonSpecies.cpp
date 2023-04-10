@@ -29,21 +29,6 @@ void PokemonSpecies::initStats(string species) {
 	mBaseStats[SPD] = get<5>(stats);
 }
 
-/*
-PokemonSpecies::PokemonSpecies(
-	int dexNum,
-	string species,
-	Type type1, Type type2,
-	int baseHP, int baseAtk, int baseDef, int baseSpAtk, int baseSpDef, int baseSpd,
-	int genderRatio
-) :
-	mDexNum(dexNum),
-	mSpecies(species),
-	mType1(type1), mType2(type2),
-	mBaseHP(baseHP), mBaseAtk(baseAtk), mBaseDef(baseDef), mBaseSpAtk(baseSpAtk), mBaseSpDef(baseSpDef), mBaseSpd(baseSpd),
-	mGenderRatio(genderRatio) {
-}*/
-
 void PokemonSpecies::print() {
 	cout << mSpecies << '\n';
 

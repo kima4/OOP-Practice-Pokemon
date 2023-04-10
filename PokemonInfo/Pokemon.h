@@ -10,7 +10,7 @@
 
 using namespace std;
 
-class Pokemon : protected PokemonSpecies {
+class Pokemon {
 public:
 
 	//constructors
@@ -78,6 +78,7 @@ public:
 	void print();
 
 private:
+	PokemonSpecies* mSpecies;
 	unsigned int mLevel;
 	string mNickname;
 

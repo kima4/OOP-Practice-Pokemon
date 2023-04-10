@@ -518,5 +518,4 @@ map<string, tuple<int, int, int, int, int, int>> SpeciesStats = {
 };
 
 
-
 #endif
