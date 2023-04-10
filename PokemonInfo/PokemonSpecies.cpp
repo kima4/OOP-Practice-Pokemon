@@ -46,6 +46,17 @@ PokemonSpecies::PokemonSpecies(
 
 void PokemonSpecies::print() {
 	cout << mSpecies << '\n';
+
+	cout << getTypeString(mType1) << "  " << getTypeString(mType2) << '\n';
+
+	cout << "--------- Base Stats ---------\n";
+	cout << "     HP: " << mBaseStats[0] << '\n';
+	cout << "    Atk: " << mBaseStats[1] << '\n';
+	cout << "    Def: " << mBaseStats[2] << '\n';
+	cout << "  SpAtk: " << mBaseStats[3] << '\n';
+	cout << "  SpDef: " << mBaseStats[4] << '\n';
+	cout << "    Spd: " << mBaseStats[5] << '\n';
+
 }
 
 string PokemonSpecies::getSpecies() {
@@ -73,6 +84,9 @@ int PokemonSpecies::getBaseSpDef() {
 }
 int PokemonSpecies::getBaseSpd() {
 	return mBaseStats[5];
+}
+int* PokemonSpecies::getBaseStats() {
+	return mBaseStats;
 }
 
 int PokemonSpecies::getGenderRatio() {

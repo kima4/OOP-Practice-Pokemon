@@ -37,6 +37,8 @@ public:
 
 	// gets species types
 	tuple<Type, Type> getTypes();
+	void setType1(Type type);
+	void setType2(Type type);
 
 	// gets base stats
 	int getBaseHP();
@@ -45,13 +47,10 @@ public:
 	int getBaseSpAtk();
 	int getBaseSpDef();
 	int getBaseSpd();
+	int* getBaseStats();
 
 	// gets gender ratio
 	int getGenderRatio();
-
-	// setters
-	void setType1(Type type);
-	void setType2(Type type);
 
 
 protected:

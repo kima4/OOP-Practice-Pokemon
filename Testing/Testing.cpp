@@ -6,6 +6,7 @@
 #include "../TypeInfo/TypeInteractions.h"
 //#include "../PokemonInfo/PokemonDatabase.h"
 #include "../PokemonInfo/PokemonSpecies.h"
+#include "../PokemonInfo/Pokemon.h"
 
 
 
@@ -140,6 +141,15 @@ void ArcanineStats() {
 	IS_TRUE(resultSpd == expectedSpd);
 }
 
+// creating individual piloswine and checking level
+void PiloswineIndividual() {
+	Pokemon* piloswine = new Pokemon("Piloswine", 22);
+	int result = piloswine->getLevel();
+	int expected = 22;
+	piloswine->print();
+	IS_TRUE(result == expected);
+}
+
 
 
 
@@ -162,6 +172,7 @@ int main() {
 	BulbasaurSpecies();
 	WigglytuffTypes();
 	ArcanineStats();
+	PiloswineIndividual();
 
 	return 0;
 }

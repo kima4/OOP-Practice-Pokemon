@@ -1,7 +1,7 @@
 all: tests
 
-tests: Testing.o Types.o TypeInteractions.o PokemonSpecies.o
-	g++ -o tests Testing.o Types.o TypeInteractions.o PokemonSpecies.o
+tests: Testing.o Types.o TypeInteractions.o PokemonSpecies.o Pokemon.o
+	g++ -o tests Testing.o Types.o TypeInteractions.o PokemonSpecies.o Pokemon.o
 
 Testing.o: Testing.cpp Testing.h ../TypeInfo/Types.h
 	g++ -c Testing.cpp
@@ -14,6 +14,9 @@ TypeInteractions.o: ../TypeInfo/TypeInteractions.cpp ../TypeInfo/TypeInteraction
 
 PokemonSpecies.o: ../PokemonInfo/PokemonSpecies.cpp ../PokemonInfo/PokemonSpecies.h ../TypeInfo/Types.h
 	g++ -c ../PokemonInfo/PokemonSpecies.cpp
+
+Pokemon.o: ../PokemonInfo/Pokemon.cpp ../PokemonInfo/Pokemon.h
+	g++ -c ../PokemonInfo/Pokemon.cpp
 
 clean:
 	rm -f *.o tests
