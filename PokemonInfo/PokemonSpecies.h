@@ -9,6 +9,8 @@
 
 using namespace std;
 
+enum Stat { HP, ATK, DEF, SPATK, SPDEF, SPD, NUM_STATS};
+
 // class for all species
 class PokemonSpecies {
 public:
@@ -59,7 +61,7 @@ protected:
 	Type mType1;
 	Type mType2;
 
-	int mBaseStats[6];
+	int mBaseStats[NUM_STATS];
 
 	int mGenderRatio;
 };

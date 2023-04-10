@@ -69,13 +69,13 @@ private:
 	string mNickname;
 
 	// ivs
-	int mIVs[6];
+	int mIVs[NUM_STATS];
 
 	// evs
-	int mEVs[6];
+	int mEVs[NUM_STATS];
 
 	// stats
-	int mStats[6];
+	int mStats[NUM_STATS];
 	int mCurrentHP;
 
 };

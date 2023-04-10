@@ -22,20 +22,20 @@ Pokemon::Pokemon(string species, int level, string nickname) : PokemonSpecies(sp
 void Pokemon::initIVs() {
 	srand(time(0));
 
-	for (int i = 0; i < 6; i++) {
+	for (int i = HP; i != NUM_STATS; i++) {
 		mIVs[i] = rand() % 32;
 	}
 }
 
 void Pokemon::initEVs() {
-	for (int i = 0; i < 6; i++) {
+	for (int i = HP; i != NUM_STATS; i++) {
 		mEVs[i] = 0;
 	}
 }
 
 void Pokemon::initStats() {
 	mStats[0] = calcMaxHP();
-	for (int i = 1; i < 6; i++) {
+	for (int i = ATK; i != NUM_STATS; i++) {
 		mStats[i] = calcOtherStat(i);
 	}
 }
@@ -58,22 +58,22 @@ void Pokemon::setNickname(string nickname) {
 
 
 int Pokemon::getIVHP() {
-	return mIVs[0];
+	return mIVs[HP];
 }
 int Pokemon::getIVAtk() {
-	return mIVs[1];
+	return mIVs[ATK];
 }
 int Pokemon::getIVDef() {
-	return mIVs[2];
+	return mIVs[DEF];
 }
 int Pokemon::getIVSpAtk() {
-	return mIVs[3];
+	return mIVs[SPATK];
 }
 int Pokemon::getIVSpDef() {
-	return mIVs[4];
+	return mIVs[SPDEF];
 }
 int Pokemon::getIVSpd() {
-	return mIVs[5];
+	return mIVs[SPD];
 }
 int* Pokemon::getIVs() {
 	return mIVs;
@@ -81,60 +81,60 @@ int* Pokemon::getIVs() {
 
 
 int Pokemon::getEVHP() {
-	return mEVs[0];
+	return mEVs[HP];
 }
 int Pokemon::getEVAtk() {
-	return mEVs[1];
+	return mEVs[ATK];
 }
 int Pokemon::getEVDef() {
-	return mEVs[2];
+	return mEVs[DEF];
 }
 int Pokemon::getEVSpAtk() {
-	return mEVs[3];
+	return mEVs[SPATK];
 }
 int Pokemon::getEVSpDef() {
-	return mEVs[4];
+	return mEVs[SPDEF];
 }
 int Pokemon::getEVSpd() {
-	return mEVs[5];
+	return mEVs[SPD];
 }
 int* Pokemon::getEVs() {
 	return mEVs;
 }
 
 void Pokemon::setEVHP(int ev) {
-	mEVs[0] = ev;
+	mEVs[HP] = ev;
 }
 void Pokemon::setEVAtk(int ev) {
-	mEVs[1] = ev;
+	mEVs[ATK] = ev;
 }
 void Pokemon::setEVDef(int ev) {
-	mEVs[2] = ev;
+	mEVs[DEF] = ev;
 }
 void Pokemon::setEVSpAtk(int ev) {
-	mEVs[3] = ev;
+	mEVs[SPATK] = ev;
 }
 void Pokemon::setEVSpDef(int ev) {
-	mEVs[4] = ev;
+	mEVs[SPDEF] = ev;
 }
 void Pokemon::setEVSpd(int ev) {
-	mEVs[5] = ev;
+	mEVs[SPD] = ev;
 }
 void Pokemon::setEVs(int* evs) {
-	setEVHP(evs[0]);
-	setEVAtk(evs[1]);
-	setEVDef(evs[2]);
-	setEVSpAtk(evs[3]);
-	setEVSpDef(evs[4]);
-	setEVSpd(evs[5]);
+	setEVHP(evs[HP]);
+	setEVAtk(evs[ATK]);
+	setEVDef(evs[DEF]);
+	setEVSpAtk(evs[SPATK]);
+	setEVSpDef(evs[SPDEF]);
+	setEVSpd(evs[SPD]);
 }
 void Pokemon::addEVs(int* evs) {
-	setEVHP(getEVHP() + evs[0]);
-	setEVAtk(getEVAtk() + evs[1]);
-	setEVDef(getEVDef() + evs[2]);
-	setEVSpAtk(getEVSpAtk() + evs[3]);
-	setEVSpDef(getEVSpDef() + evs[4]);
-	setEVSpd(getEVSpd() + evs[5]);
+	setEVHP(getEVHP() + evs[HP]);
+	setEVAtk(getEVAtk() + evs[ATK]);
+	setEVDef(getEVDef() + evs[DEF]);
+	setEVSpAtk(getEVSpAtk() + evs[SPATK]);
+	setEVSpDef(getEVSpDef() + evs[SPDEF]);
+	setEVSpd(getEVSpd() + evs[SPD]);
 }
 
 
@@ -174,26 +174,26 @@ void Pokemon::print() {
 	PokemonSpecies::print();
 
 	cout << "--------- IVs ---------\n";
-	cout << "     HP: " << mIVs[0] << '\n';
-	cout << "    Atk: " << mIVs[1] << '\n';
-	cout << "    Def: " << mIVs[2] << '\n';
-	cout << "  SpAtk: " << mIVs[3] << '\n';
-	cout << "  SpDef: " << mIVs[4] << '\n';
-	cout << "    Spd: " << mIVs[5] << '\n';
+	cout << "     HP: " << mIVs[HP] << '\n';
+	cout << "    Atk: " << mIVs[ATK] << '\n';
+	cout << "    Def: " << mIVs[DEF] << '\n';
+	cout << "  SpAtk: " << mIVs[SPATK] << '\n';
+	cout << "  SpDef: " << mIVs[SPDEF] << '\n';
+	cout << "    Spd: " << mIVs[SPD] << '\n';
 
 	cout << "--------- EVs ---------\n";
-	cout << "     HP: " << mEVs[0] << '\n';
-	cout << "    Atk: " << mEVs[1] << '\n';
-	cout << "    Def: " << mEVs[2] << '\n';
-	cout << "  SpAtk: " << mEVs[3] << '\n';
-	cout << "  SpDef: " << mEVs[4] << '\n';
-	cout << "    Spd: " << mEVs[5] << '\n';
+	cout << "     HP: " << mEVs[HP] << '\n';
+	cout << "    Atk: " << mEVs[ATK] << '\n';
+	cout << "    Def: " << mEVs[DEF] << '\n';
+	cout << "  SpAtk: " << mEVs[SPATK] << '\n';
+	cout << "  SpDef: " << mEVs[SPDEF] << '\n';
+	cout << "    Spd: " << mEVs[SPD] << '\n';
 
 	cout << "--------- Stats ---------\n";
-	cout << "     HP: " << getCurrentHP() << "/" << mStats[0] << '\n';
-	cout << "    Atk: " << mStats[1] << '\n';
-	cout << "    Def: " << mStats[2] << '\n';
-	cout << "  SpAtk: " << mStats[3] << '\n';
-	cout << "  SpDef: " << mStats[4] << '\n';
-	cout << "    Spd: " << mStats[5] << '\n';
+	cout << "     HP: " << getCurrentHP() << "/" << mStats[HP] << '\n';
+	cout << "    Atk: " << mStats[ATK] << '\n';
+	cout << "    Def: " << mStats[DEF] << '\n';
+	cout << "  SpAtk: " << mStats[SPATK] << '\n';
+	cout << "  SpDef: " << mStats[SPDEF] << '\n';
+	cout << "    Spd: " << mStats[SPD] << '\n';
 }

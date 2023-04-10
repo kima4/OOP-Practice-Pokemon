@@ -21,12 +21,12 @@ void PokemonSpecies::initTypes(string species) {
 
 void PokemonSpecies::initStats(string species) {
 	tuple<int, int, int, int, int, int> stats = SpeciesStats.at(species);
-	mBaseStats[0] = get<0>(stats);
-	mBaseStats[1] = get<1>(stats);
-	mBaseStats[2] = get<2>(stats);
-	mBaseStats[3] = get<3>(stats);
-	mBaseStats[4] = get<4>(stats);
-	mBaseStats[5] = get<5>(stats);
+	mBaseStats[HP] = get<0>(stats);
+	mBaseStats[ATK] = get<1>(stats);
+	mBaseStats[DEF] = get<2>(stats);
+	mBaseStats[SPATK] = get<3>(stats);
+	mBaseStats[SPDEF] = get<4>(stats);
+	mBaseStats[SPD] = get<5>(stats);
 }
 
 /*
@@ -50,12 +50,12 @@ void PokemonSpecies::print() {
 	cout << getTypeString(mType1) << "  " << getTypeString(mType2) << '\n';
 
 	cout << "--------- Base Stats ---------\n";
-	cout << "     HP: " << mBaseStats[0] << '\n';
-	cout << "    Atk: " << mBaseStats[1] << '\n';
-	cout << "    Def: " << mBaseStats[2] << '\n';
-	cout << "  SpAtk: " << mBaseStats[3] << '\n';
-	cout << "  SpDef: " << mBaseStats[4] << '\n';
-	cout << "    Spd: " << mBaseStats[5] << '\n';
+	cout << "     HP: " << mBaseStats[HP] << '\n';
+	cout << "    Atk: " << mBaseStats[ATK] << '\n';
+	cout << "    Def: " << mBaseStats[DEF] << '\n';
+	cout << "  SpAtk: " << mBaseStats[SPATK] << '\n';
+	cout << "  SpDef: " << mBaseStats[SPDEF] << '\n';
+	cout << "    Spd: " << mBaseStats[SPD] << '\n';
 
 }
 
@@ -68,22 +68,22 @@ tuple<Type, Type> PokemonSpecies::getTypes() {
 }
 
 int PokemonSpecies::getBaseHP() {
-	return mBaseStats[0];
+	return mBaseStats[HP];
 }
 int PokemonSpecies::getBaseAtk() {
-	return mBaseStats[1];
+	return mBaseStats[ATK];
 }
 int PokemonSpecies::getBaseDef() {
-	return mBaseStats[2];
+	return mBaseStats[DEF];
 }
 int PokemonSpecies::getBaseSpAtk() {
-	return mBaseStats[3];
+	return mBaseStats[SPATK];
 }
 int PokemonSpecies::getBaseSpDef() {
-	return mBaseStats[4];
+	return mBaseStats[SPDEF];
 }
 int PokemonSpecies::getBaseSpd() {
-	return mBaseStats[5];
+	return mBaseStats[SPD];
 }
 int* PokemonSpecies::getBaseStats() {
 	return mBaseStats;
