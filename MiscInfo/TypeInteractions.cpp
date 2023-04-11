@@ -161,6 +161,13 @@ map<Type, map<Type, double>> TypeChart = {
 };
 
 
+/**
+ * Get damage multiplier from one type to another
+ * 
+ * @param attacker - the Type of the attacking move
+ * @param defender - the Type of the defending Pokemon
+ * @return - value of damage multiplier
+ */
 double getMultiplier(Type attacker, Type defender) {
 	double multiplier;
 	try {
@@ -172,10 +179,25 @@ double getMultiplier(Type attacker, Type defender) {
 	return multiplier;
 }
 
+/**
+ * Get damage multiplier from one type to a two-typed Pokemon
+ *
+ * @param attacker - the Type of the attacking move
+ * @param defender1 - one of the Types of the defending Pokemon
+ * @param defender2 - the other Type of the defending Pokemon
+ * @return - value of damage multiplier
+ */
 double getMultiplier(Type attacker, Type defender1, Type defender2) {
 	return getMultiplier(attacker, defender1) * getMultiplier(attacker, defender2);
 }
 
+/**
+ * Get a dictionary of damage multipliers for a two-typed Pokemon
+ *
+ * @param type1 - one of the Types of the defending Pokemon
+ * @param type2 - the other Type of the defending Pokemon
+ * @return - dictionary with damage values of all types
+ */
 map<Type, double> getWeaknesses(Type type1, Type type2) {
 	map<Type, double> weaknesses;
 	for (int i = NORMAL; i != NONE; i++) {

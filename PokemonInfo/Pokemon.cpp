@@ -1,12 +1,18 @@
 #include <iostream>
 #include <string>
 #include <tuple>
-#include <time.h>
 #include <cstdlib>
 
 #include "Pokemon.h"
 #include "PokemonList.h"
 
+/**
+ * Create a Pokemon object
+ *
+ * @param species - the species name
+ * @param level - the level
+ * @return - a new Pokemon object
+ */
 Pokemon::Pokemon(string species, int level) {
 	mSpecies = SpeciesList.at(species);
 	setLevel(level);
@@ -21,20 +27,33 @@ Pokemon::Pokemon(string species, int level) {
 	resetStatChanges();
 }
 
+/**
+ * Set the IVs of the Pokemon object
+ *
+ * @return - none, but the Pokemon object has randomly generated IVs
+ */
 void Pokemon::initIVs() {
-	//srand(time(0));
-
 	for (int i = HP; i != NUM_STATS; i++) {
 		mIVs[i] = rand() % 32;
 	}
 }
 
+/**
+ * Set the EVs of the Pokemon object
+ *
+ * @return - none, but the Pokemon object has EVs of 0 filled in
+ */
 void Pokemon::initEVs() {
 	for (int i = HP; i != NUM_STATS; i++) {
 		mEVs[i] = 0;
 	}
 }
 
+/**
+ * Calculate the stat values of the Pokemon object
+ *
+ * @return - none, but the Pokemon object has filled in stat information
+ */
 void Pokemon::initStats() {
 	mStats[0] = calcMaxHP();
 	for (int i = ATK; i != NUM_STATS; i++) {
@@ -42,6 +61,11 @@ void Pokemon::initStats() {
 	}
 }
 
+/**
+ * Sets the moves of the Pokemon object
+ *
+ * @return - none, but the Pokemon object has filled in moves
+ */
 void Pokemon::initMoves() {
 	Move* move1 = new Move("PLACEHOLDER");
 	Move* move2 = new Move("PLACEHOLDER");
@@ -52,6 +76,9 @@ void Pokemon::initMoves() {
 	setMoves(moves);
 }
 
+/**
+ * Basic information getters and setters
+ */
 int Pokemon::getLevel() {
 	return mLevel;
 }
@@ -79,7 +106,7 @@ void Pokemon::setGender() {
 	}
 	else {
 		int gendVal = rand() % 8;
-		if (GenderRatio <= gendVal) {
+		if (gr <= gendVal) {
 			mGender = MALE;
 		}
 		mGender = FEMALE;
@@ -90,7 +117,9 @@ void Pokemon::setGender(Gender gender) {
 	mGender = gender;
 }
 
-
+/**
+ * IV getters
+ */
 int Pokemon::getIVHP() {
 	return mIVs[HP];
 }
@@ -113,7 +142,9 @@ int* Pokemon::getIVs() {
 	return mIVs;
 }
 
-
+/**
+ * EV getters
+ */
 int Pokemon::getEVHP() {
 	return mEVs[HP];
 }
@@ -136,6 +167,9 @@ int* Pokemon::getEVs() {
 	return mEVs;
 }
 
+/**
+ * EV setters
+ */
 void Pokemon::setEVHP(int ev) {
 	mEVs[HP] = ev;
 }
@@ -172,7 +206,9 @@ void Pokemon::addEVs(int* evs) {
 }
 
 
-
+/**
+ * Stat calculation
+ */
 int Pokemon::calcMaxHP() {
 	int maxHP = mSpecies->getBaseHP() * 2 + getIVHP() + (getEVHP() / 4);
 	maxHP *= getLevel();
@@ -199,6 +235,10 @@ void Pokemon::setCurrentHP(int hp) {
 	mCurrentHP = hp;
 }
 
+
+/**
+ * Stat change getters and setters
+ */
 int Pokemon::getStatChange(Stat stat) {
 	return mStatChanges[stat];
 }
@@ -218,6 +258,9 @@ void Pokemon::resetStatChanges() {
 	}
 }
 
+/**
+ * Move getters and setters
+ */
 Move* Pokemon::getMove(int moveSlot) {
 	return mMoves[moveSlot];
 }
@@ -255,7 +298,9 @@ void Pokemon::setMovePP(int pp, int moveSlot) {
 	mMovePP[moveSlot] = pp;
 }
 
-
+/**
+ * Print information about the Pokemon object to console
+ */
 void Pokemon::print() {
 
 	cout << mNickname << '\n';

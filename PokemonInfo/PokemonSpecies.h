@@ -30,8 +30,9 @@ public:
 
 	// gets species types
 	Type* getTypes();
-	void setType1(Type type);
-	void setType2(Type type);
+
+	// gets gender ratio
+	int getGenderRatio();
 
 	// gets base stats
 	int getBaseHP();
@@ -42,8 +43,6 @@ public:
 	int getBaseSpd();
 	int* getBaseStats();
 
-	// gets gender ratio
-	int getGenderRatio();
 
 
 protected:
@@ -53,6 +52,8 @@ protected:
 
 	int mBaseStats[NUM_STATS];
 
+	// -1 = genderless, 0 = all male, 1 = 7 male : 1 female, 2 = 3 male : 1 female
+	// 4 = 1 male : 1 female, 6 = 1 male : 3 female, 8 = all female
 	int mGenderRatio;
 	EggGroup mEggGroups[2];
 	int mEggCycles;

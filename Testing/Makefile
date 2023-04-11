@@ -1,7 +1,7 @@
 all: tests
 
-tests: Testing.o Types.o TypeInteractions.o PokemonSpecies.o Pokemon.o Move.o Trainer.o Battle.o
-	g++ -o tests Testing.o Types.o TypeInteractions.o PokemonSpecies.o Pokemon.o Move.o Trainer.o Battle.o
+tests: Testing.o Types.o TypeInteractions.o PokemonSpecies.o Pokemon.o Move.o Trainer.o BattleOverview.o
+	g++ -o tests Testing.o Types.o TypeInteractions.o PokemonSpecies.o Pokemon.o Move.o Trainer.o BattleOverview.o
 
 Testing.o: Testing.cpp Testing.h ../MiscInfo/Types.h
 	g++ -c Testing.cpp
@@ -24,8 +24,8 @@ Move.o: ../MoveInfo/Move.cpp ../MoveInfo/Move.h ../MoveInfo/MoveDatabase.h
 Trainer.o: ../TrainerInfo/Trainer.cpp ../TrainerInfo/Trainer.h
 	g++ -c ../TrainerInfo/Trainer.cpp
 
-Battle.o: ../BattleInfo/Battle.cpp ../BattleInfo/Battle.h
-	g++ -c ../BattleInfo/Battle.cpp
+BattleOverview.o: ../BattleInfo/BattleOverview.cpp ../BattleInfo/BattleOverview.h
+	g++ -c ../BattleInfo/BattleOverview.cpp
 
 clean:
 	rm -f *.o tests

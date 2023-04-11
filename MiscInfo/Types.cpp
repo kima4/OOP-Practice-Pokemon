@@ -26,7 +26,12 @@ map<Type, string> TypeStr = {
 	{ NONE, "" }
 };
 
-
+/**
+ * Convert a Type enum to its string equivalent
+ * 
+ * @param type - Type enum to be converted to string
+ * @return - string equivalent of enum
+ */
 string getTypeString(Type type) {
 	return TypeStr.at(type);
 }

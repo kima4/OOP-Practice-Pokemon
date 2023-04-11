@@ -1,5 +1,5 @@
-#ifndef BATTLE_H
-#define BATTLE_H
+#ifndef BATTLEOVERVIEW_H
+#define BATTLEOVERVIEW_H
 
 #include <string>
 
@@ -13,6 +13,8 @@ public:
 
 
 
+	bool flee();
+
 private:
 	bool mIsWild;
 
@@ -22,6 +24,7 @@ private:
 	Pokemon* mPlayerPokemon;
 	Pokemon* mOpponentPokemon;
 
+	int mEscapeAttempts;
 
 };
 

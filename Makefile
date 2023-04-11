@@ -6,13 +6,13 @@ pokemon: main.o Types.o TypeInteractions.o PokemonSpecies.o Pokemon.o Move.o Tra
 main.o: main.cpp
 	g++ -c main.cpp
 
-Types.o: TypeInfo/Types.cpp TypeInfo/Types.h
-	g++ -c TypeInfo/Types.cpp
+Types.o: MiscInfo/Types.cpp MiscInfo/Types.h
+	g++ -c MiscInfo/Types.cpp
 
-TypeInteractions.o: TypeInfo/TypeInteractions.cpp TypeInfo/TypeInteractions.h TypeInfo/Types.h
-	g++ -c TypeInfo/TypeInteractions.cpp
+TypeInteractions.o: MiscInfo/TypeInteractions.cpp MiscInfo/TypeInteractions.h MiscInfo/Types.h
+	g++ -c MiscInfo/TypeInteractions.cpp
 
-PokemonSpecies.o: PokemonInfo/PokemonSpecies.cpp PokemonInfo/PokemonSpecies.h TypeInfo/Types.h
+PokemonSpecies.o: PokemonInfo/PokemonSpecies.cpp PokemonInfo/PokemonSpecies.h MiscInfo/Types.h
 	g++ -c PokemonInfo/PokemonSpecies.cpp
 
 Pokemon.o: PokemonInfo/Pokemon.cpp PokemonInfo/Pokemon.h

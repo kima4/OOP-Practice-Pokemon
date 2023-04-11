@@ -8,17 +8,35 @@
 
 using namespace std;
 
+/**
+ * Create a PokemonSpecies object
+ *
+ * @param species - the species name
+ * @return - a new PokemonSpecies object
+ */
 PokemonSpecies::PokemonSpecies(string species) : mSpecies(species) {
 	initTypes(species);
 	initStats(species);
 }
 
+/**
+ * Set the typing of the specified pokemon
+ *
+ * @param species - the species name
+ * @return - none, but the PokemonSpecies object has filled in types
+ */
 void PokemonSpecies::initTypes(string species) {
 	tuple<Type, Type> types = SpeciesTypes.at(species);
-	setType1(get<0>(types));
-	setType2(get<1>(types));
+	mTypes[0] = get<0>(types);
+	mTypes[1] = get<1>(types);
 }
 
+/**
+ * Set the base stats of the specified pokemon
+ *
+ * @param species - the species name
+ * @return - none, but the PokemonSpecies object has filled in base stats
+ */
 void PokemonSpecies::initStats(string species) {
 	tuple<int, int, int, int, int, int> stats = SpeciesStats.at(species);
 	mBaseStats[HP] = get<0>(stats);
@@ -29,6 +47,12 @@ void PokemonSpecies::initStats(string species) {
 	mBaseStats[SPD] = get<5>(stats);
 }
 
+/**
+ * Set the breeding information of the specified pokemon
+ *
+ * @param species - the species name
+ * @return - none, but the PokemonSpecies object has filled in breeding information
+ */
 void PokemonSpecies::initBreeding(string species) {
 	tuple<int, EggGroup, EggGroup, int> breeding = SpeciesBreeding.at(species);
 	mGenderRatio = get<0>(breeding);
@@ -37,6 +61,9 @@ void PokemonSpecies::initBreeding(string species) {
 	mEggCycles = get<3>(breeding);
 }
 
+/**
+ * Print information about the PokemonSpecies object to console
+ */
 void PokemonSpecies::print() {
 	cout << mSpecies << '\n';
 
@@ -52,6 +79,9 @@ void PokemonSpecies::print() {
 
 }
 
+/**
+ * Basic information getters
+ */
 string PokemonSpecies::getSpecies() {
 	return mSpecies;
 }
@@ -60,6 +90,13 @@ Type* PokemonSpecies::getTypes() {
 	return { mTypes };
 }
 
+int PokemonSpecies::getGenderRatio() {
+	return mGenderRatio;
+}
+
+/**
+ * Base stat getters
+ */
 int PokemonSpecies::getBaseHP() {
 	return mBaseStats[HP];
 }
@@ -80,16 +117,4 @@ int PokemonSpecies::getBaseSpd() {
 }
 int* PokemonSpecies::getBaseStats() {
 	return mBaseStats;
-}
-
-int PokemonSpecies::getGenderRatio() {
-	return mGenderRatio;
-}
-
-void PokemonSpecies::setType1(Type type) {
-	mTypes[0] = type;
-}
-
-void PokemonSpecies::setType2(Type type) {
-	mTypes[1] = type;
 }

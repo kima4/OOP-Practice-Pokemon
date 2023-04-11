@@ -1,7 +1,8 @@
 #include <iostream>
 #include <string>
+#include <cstdlib>
 
-#include "Battle.h"
+#include "BattleOverview.h"
 
 using namespace std;
 
@@ -19,3 +20,24 @@ Battle::Battle(Trainer* player, Pokemon* wild) : mPlayer(player), mOpponentPokem
 
 
 
+
+
+
+
+
+bool Battle::flee() {
+	if (!mIsWild) {
+		return false;
+	}
+
+	int playerSpeed = mPlayerPokemon->getStat(SPD);
+	int wildSpeed = mOpponentPokemon->getStat(SPD);
+
+	int escapeOdds = (((playerSpeed * 128) / wildSpeed) + 30 * mEscapeAttempts) % 256;
+	int escapeVal = rand() % 256;
+
+	if (escapeOdds > escapeVal) {
+		return true;
+	}
+	return false;
+}
