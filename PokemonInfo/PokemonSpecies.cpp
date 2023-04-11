@@ -2,7 +2,7 @@
 #include <string>
 #include <tuple>
 
-#include "../TypeInfo/Types.h"
+#include "../MiscInfo/Types.h"
 #include "PokemonSpecies.h"
 #include "PokemonDatabase.h"
 
@@ -29,10 +29,18 @@ void PokemonSpecies::initStats(string species) {
 	mBaseStats[SPD] = get<5>(stats);
 }
 
+void PokemonSpecies::initBreeding(string species) {
+	tuple<int, EggGroup, EggGroup, int> breeding = SpeciesBreeding.at(species);
+	mGenderRatio = get<0>(breeding);
+	mEggGroups[0] = get<1>(breeding);
+	mEggGroups[1] = get<2>(breeding);
+	mEggCycles = get<3>(breeding);
+}
+
 void PokemonSpecies::print() {
 	cout << mSpecies << '\n';
 
-	cout << getTypeString(mType1) << "  " << getTypeString(mType2) << '\n';
+	cout << getTypeString(mTypes[0]) << "  " << getTypeString(mTypes[1]) << '\n';
 
 	cout << "--------- Base Stats ---------\n";
 	cout << "     HP: " << mBaseStats[HP] << '\n';
@@ -48,8 +56,8 @@ string PokemonSpecies::getSpecies() {
 	return mSpecies;
 }
 
-tuple<Type, Type> PokemonSpecies::getTypes() {
-	return { mType1, mType2 };
+Type* PokemonSpecies::getTypes() {
+	return { mTypes };
 }
 
 int PokemonSpecies::getBaseHP() {
@@ -79,9 +87,9 @@ int PokemonSpecies::getGenderRatio() {
 }
 
 void PokemonSpecies::setType1(Type type) {
-	mType1 = type;
+	mTypes[0] = type;
 }
 
 void PokemonSpecies::setType2(Type type) {
-	mType2 = type;
+	mTypes[1] = type;
 }

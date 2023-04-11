@@ -3,7 +3,7 @@
 
 #include <string>
 
-#include "../TypeInfo/Types.h"
+#include "../MiscInfo/Types.h"
 
 using namespace std;
 

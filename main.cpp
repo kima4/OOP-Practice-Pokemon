@@ -1,5 +1,5 @@
 
-#include "TypeInfo/TypeInteractions.h"
+#include "MiscInfo/TypeInteractions.h"
 
 int main() {
 	return 0;

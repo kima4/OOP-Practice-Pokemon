@@ -11,6 +11,7 @@ Pokemon::Pokemon(string species, int level) {
 	mSpecies = SpeciesList.at(species);
 	setLevel(level);
 	setNickname(species);
+	setGender();
 	initIVs();
 	initEVs();
 	initStats();
@@ -65,6 +66,28 @@ string Pokemon::getNickname() {
 
 void Pokemon::setNickname(string nickname) {
 	mNickname = nickname;
+}
+
+Gender Pokemon::getGender() {
+	return mGender;
+}
+
+void Pokemon::setGender() {
+	int gr = mSpecies->getGenderRatio();
+	if (gr < 0) {
+		mGender = UNKNOWN;
+	}
+	else {
+		int gendVal = rand() % 8;
+		if (GenderRatio <= gendVal) {
+			mGender = MALE;
+		}
+		mGender = FEMALE;
+	}
+}
+
+void Pokemon::setGender(Gender gender) {
+	mGender = gender;
 }
 
 

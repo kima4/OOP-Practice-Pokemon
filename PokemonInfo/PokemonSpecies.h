@@ -5,7 +5,8 @@
 #include <tuple>
 #include <map>
 
-#include "../TypeInfo/Types.h"
+#include "../MiscInfo/Types.h"
+#include "BreedingInfo/Breeding.h"
 
 using namespace std;
 
@@ -19,17 +20,7 @@ public:
 	PokemonSpecies(string species);
 	void initTypes(string species);
 	void initStats(string species);
-
-
-	/*
-	// constructor
-	PokemonSpecies(
-		int dexNum,
-		string species,
-		Type type1, Type type2,
-		int baseHP, int baseAtk, int baseDef, int baseSpAtk, int baseSpDef, int baseSpd,
-		int genderRatio
-	);*/
+	void initBreeding(string species);
 
 	// prints species information
 	void print();
@@ -38,7 +29,7 @@ public:
 	string getSpecies();
 
 	// gets species types
-	tuple<Type, Type> getTypes();
+	Type* getTypes();
 	void setType1(Type type);
 	void setType2(Type type);
 
@@ -58,12 +49,14 @@ public:
 protected:
 	unsigned int mDexNum;
 	string mSpecies;
-	Type mType1;
-	Type mType2;
+	Type mTypes[2];
 
 	int mBaseStats[NUM_STATS];
 
 	int mGenderRatio;
+	EggGroup mEggGroups[2];
+	int mEggCycles;
+
 };
 
 

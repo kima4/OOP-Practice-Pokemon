@@ -13,10 +13,18 @@ string Trainer::getTrainerName() {
 	return mName;
 }
 
-Pokemon* Trainer::getPokemon() {
+Pokemon** Trainer::getPokemon() {
 	return mPokemon;
 }
 
 int Trainer::getNumPokemon() {
 	return mNumPokemon;
+}
+
+int Trainer::getNumUsablePokemon() {
+	return mNumUsablePokemon;
+}
+
+Pokemon* Trainer::getLead() {
+	return mPokemon[0];
 }

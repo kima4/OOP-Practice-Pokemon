@@ -28,6 +28,10 @@ public:
 	string getNickname();
 	void setNickname(string nickname);
 
+	Gender getGender();
+	void setGender();
+	void setGender(Gender gender);
+
 	// iv getters
 	int getIVHP();
 	int getIVAtk();
@@ -86,7 +90,7 @@ private:
 	PokemonSpecies* mSpecies;
 	unsigned int mLevel;
 	string mNickname;
-	int mGender;
+	Gender mGender;
 
 	// ivs
 	int mIVs[NUM_STATS];

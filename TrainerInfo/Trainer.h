@@ -13,13 +13,18 @@ public:
 	Trainer(string name);
 
 	string getTrainerName();
-	Pokemon* getPokemon();
+	Pokemon** getPokemon();
 	int getNumPokemon();
+	int getNumUsablePokemon();
+
+	Pokemon* getLead();
+
 
 private:
 	string mName;
 	Pokemon* mPokemon[6];
 	int mNumPokemon;
+	int mNumUsablePokemon;
 };
 
 

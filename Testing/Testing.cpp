@@ -4,8 +4,8 @@
 #include<cstdlib>
 
 #include "Testing.h"
-#include "../TypeInfo/Types.h"
-#include "../TypeInfo/TypeInteractions.h"
+#include "../MiscInfo/Types.h"
+#include "../MiscInfo/TypeInteractions.h"
 //#include "../PokemonInfo/PokemonDatabase.h"
 #include "../PokemonInfo/PokemonSpecies.h"
 #include "../PokemonInfo/Pokemon.h"
@@ -109,14 +109,14 @@ void BulbasaurSpecies() {
 // fetching wigglytuff from database and checking types
 void WigglytuffTypes() {
 	PokemonSpecies* wigglytuff = new PokemonSpecies("Wigglytuff");
-	Type result1, result2;
-	tie(result1, result2) = wigglytuff->getTypes();
+	Type* results;
+	results = wigglytuff->getTypes();
 
 	Type expected1 = NORMAL;
 	Type expected2 = FAIRY;
 
-	IS_TRUE(result1 == expected1);
-	IS_TRUE(result2 == expected2);
+	IS_TRUE(results[0] == expected1);
+	IS_TRUE(results[1] == expected2);
 }
 
 // fetching arcanine from database and checking stats
