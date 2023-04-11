@@ -22,6 +22,8 @@ public:
 	void initStats();
 	void initMoves();
 
+	PokemonSpecies* getSpecies();
+
 	int getLevel();
 	void setLevel(int level);
 
@@ -83,6 +85,7 @@ public:
 	void refillMoves();
 	int getMovePP(int moveSlot);
 	void setMovePP(int pp, int moveSlot);
+	void decMovePP(int moveSlot);
 
 	void print();
 
@@ -101,7 +104,7 @@ private:
 	// stats
 	int mStats[NUM_STATS];
 	int mCurrentHP;
-	int mStatChanges[NUM_STATS];
+	int mStatChanges[NUM_STAT_CHANGES];
 
 	// moves
 	Move* mMoves[4];

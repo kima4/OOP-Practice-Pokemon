@@ -79,6 +79,11 @@ void Pokemon::initMoves() {
 /**
  * Basic information getters and setters
  */
+
+PokemonSpecies* Pokemon::getSpecies() {
+	return mSpecies;
+}
+
 int Pokemon::getLevel() {
 	return mLevel;
 }
@@ -253,7 +258,7 @@ void Pokemon::addStatChange(Stat stat, int change) {
 }
 
 void Pokemon::resetStatChanges() {
-	for (int i = 1; i < NUM_STATS; i++) {
+	for (int i = 1; i < NUM_STAT_CHANGES; i++) {
 		mStatChanges[i] = 0;
 	}
 }
@@ -296,6 +301,11 @@ int Pokemon::getMovePP(int moveSlot) {
 
 void Pokemon::setMovePP(int pp, int moveSlot) {
 	mMovePP[moveSlot] = pp;
+}
+
+void Pokemon::decMovePP(int moveSlot) {
+	int pp = getMovePP(moveSlot) - 1;
+	setMovePP(pp, moveSlot);
 }
 
 /**

@@ -10,7 +10,7 @@
 
 using namespace std;
 
-enum Stat { HP, ATK, DEF, SPATK, SPDEF, SPD, NUM_STATS};
+enum Stat { HP, ATK, DEF, SPATK, SPDEF, SPD, NUM_STATS, EVA, ACC, CRIT, NUM_STAT_CHANGES };
 
 // class for all species
 class PokemonSpecies {
