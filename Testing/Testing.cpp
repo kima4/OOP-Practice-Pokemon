@@ -10,7 +10,8 @@
 #include "../PokemonInfo/PokemonSpecies.h"
 #include "../PokemonInfo/Pokemon.h"
 #include "../MoveInfo/Move.h"
-
+#include "../TrainerInfo/Trainer.h"
+#include "../BattleInfo/BattleOverview.h"
 
 
 //--------------------- TypeInfo Tests ---------------------//
@@ -178,17 +179,78 @@ void StaryuMoves() {
 // creating individual dragonite and checking move initiation
 void DragoniteMoves() {
 	Pokemon* dragonite = new Pokemon("Dragonite", 22);
-	//int result = dragonite->getMove(0)->getBasePower();
+	int result = dragonite->getMove(MOVE_1)->getBasePower();
 	int expected = 0;
 	dragonite->print();
-	//IS_TRUE(result == expected);
+	IS_TRUE(result == expected);
+}
+
+
+//--------------------- TrainerInfo Tests ---------------------//
+
+void TrainerCreate() {
+	vector<Pokemon*> party;
+	Pokemon* rattata = new Pokemon("Rattata", 14);
+	party.push_back(rattata);
+
+	Trainer* trainer = new Trainer("George", party);
+
+	vector<Pokemon*> result = trainer->getParty();
+	
+	IS_TRUE(result == party);
+}
+
+
+//--------------------- BattleInfo Tests ---------------------//
+
+void BattleTest() {
+	vector<Pokemon*> party;
+	Pokemon* pidgey = new Pokemon("Pidgey", 6);
+	party.push_back(pidgey);
+	Trainer* trainer = new Trainer("Samantha", party);
+	Pokemon* wild = new Pokemon("Mewtwo", 70);
+	BattleOverview* battle = new BattleOverview(trainer, wild);
+	string resultP = battle->getPlayerPokemon()->getSpecies()->getSpecies();
+	string expectedP = "Pidgey";
+	IS_TRUE(resultP == expectedP);
+
+}
+
+void ActionTypeCheck() {
+	vector<Pokemon*> party;
+	Pokemon* muk = new Pokemon("Muk", 84);
+	party.push_back(muk);
+	Trainer* trainer = new Trainer("Fred", party);
+	Pokemon* wild = new Pokemon("Oddish", 15);
+	BattleOverview* battle = new BattleOverview(trainer, wild);
+
+	Action* action = battle->createAction(true, 3);
+
+	ActionType expected = SWITCH;
+	ActionType result = action->getActionType();
+	IS_TRUE(result == expected);
+}
+
+void FightMoveChoice() {
+	vector<Pokemon*> party;
+	Pokemon* machamp = new Pokemon("Machamp", 92);
+	party.push_back(machamp);
+	Trainer* trainer = new Trainer("William", party);
+	Pokemon* wild = new Pokemon("Sentret", 2);
+	BattleOverview* battle = new BattleOverview(trainer, wild);
+	battle->battle();
+	/*Action* action = ;
+
+	ActionType expected = FIGHT;
+	ActionType result = action->getActionType();
+	IS_TRUE(result == expected);*/
 }
 
 
 int main() {
 
 	srand(time(0));
-
+	/*
 	cout << "------------------ TypeInfo Tests ------------------\n";
 
 	ConvertFireToString();
@@ -213,6 +275,15 @@ int main() {
 	StaryuMoves();
 	DragoniteMoves();
 
+	cout << "------------------ TrainerInfo Tests ------------------\n";
+
+	TrainerCreate();
+
+	cout << "------------------ BattleInfo Tests ------------------\n";
+
+	BattleTest();
+	ActionTypeCheck();*/
+	FightMoveChoice();
 
 	return 0;
 }

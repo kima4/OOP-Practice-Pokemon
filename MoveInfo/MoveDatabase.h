@@ -39,7 +39,7 @@ map<string, tuple<int, int, int, Type, Category>> MoveData = {
 	{ "Mega Kick", {120, 75, 5, NORMAL, PHYSICAL} },
 	{ "Jump Kick", {100, 95, 10, FIGHTING, PHYSICAL} },
 	{ "Rolling Kick", {60, 85, 15, FIGHTING, PHYSICAL} },
-	{ "Sand Attack", {0, 100, 15, GROUND, STATUS} },
+	{ "Sand-Attack", {0, 100, 15, GROUND, STATUS} },
 	{ "Headbutt", {70, 100, 15, NORMAL, PHYSICAL} },
 	{ "Horn Attack", {65, 100, 25, NORMAL, PHYSICAL} },
 	{ "Fury Attack", {15, 85, 20, NORMAL, PHYSICAL} },

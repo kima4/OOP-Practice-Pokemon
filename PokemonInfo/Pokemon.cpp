@@ -27,7 +27,6 @@ Pokemon::Pokemon(string species, int level) {
 	setCurrentHP(getStat(HP));
 	initMoves();
 	refillMoves();
-	resetStatChanges();
 }
 
 /**
@@ -280,27 +279,33 @@ void Pokemon::setCurrentHP(int hp) {
 	mCurrentHP = hp;
 }
 
-
-/**
- * Stat change getters and setters
- */
-int Pokemon::getStatChange(Stat stat) {
-	return mStatChanges[stat];
-}
-
-void Pokemon::setStatChange(Stat stat, int change) {
-	mStatChanges[stat] = change;
-}
-
-void Pokemon::addStatChange(Stat stat, int change) {
-	int prevChange = getStatChange(stat);
-	setStatChange(stat, prevChange + change);
-}
-
-void Pokemon::resetStatChanges() {
-	for (int i = 1; i < NUM_STAT_CHANGES; i++) {
-		mStatChanges[i] = 0;
+void Pokemon::takeDamage(int damage) { // TODO change so it returns the amount of actual damage taken for recoil moves
+	int currentHP = getCurrentHP();
+	int resultingHP = currentHP - damage;
+	if (resultingHP < 0) {
+		resultingHP = 0;
 	}
+	setCurrentHP(resultingHP);
+}
+
+void Pokemon::restoreHP(int healing) {
+	int currentHP = getCurrentHP();
+	int resultingHP = currentHP + healing;
+	if (resultingHP > getStat(HP)) {
+		resultingHP = getStat(HP);
+	}
+	setCurrentHP(resultingHP);
+}
+
+void Pokemon::fullyHeal() {
+	setCurrentHP(getStat(HP));
+}
+
+bool Pokemon::isFainted() {
+	if (getCurrentHP() < 1) {
+		return true;
+	}
+	return false;
 }
 
 /**
@@ -314,16 +319,23 @@ string Pokemon::getMoveName(MoveNum moveSlot) {
 	return mMoves[moveSlot]->getMoveName();
 }
 
-Move** Pokemon::getMoves() {
-	return mMoves;
+vector<Move*> Pokemon::getMoves() {
+	vector<Move*> moves;
+	for (int i = MOVE_1; i != NUM_MOVES; i++) {
+		if (getMoveName((MoveNum)i) != "PLACEHOLDER") {
+			moves.push_back(mMoves[(MoveNum)i]);
+		}
+	}
+	return moves;
 }
+/*Move** Pokemon::getMoves() {
+	return mMoves;
+}*/
 
 vector<string> Pokemon::getMoveNames() {
 	vector<string> moveNames;
-	print();
 	for (int i = MOVE_1; i != NUM_MOVES; i++) {
 		string moveName = mMoves[(MoveNum)i]->getMoveName();
-		cout << "!!!!!!!!!!!" << moveName << endl;
 		if (moveName != "PLACEHOLDER") {
 			moveNames.push_back(moveName);
 		}
@@ -378,6 +390,17 @@ int Pokemon::getMovePP(MoveNum moveSlot) {
 	return mMovePP[moveSlot];
 }
 
+vector<int> Pokemon::getMovesPP() {
+	vector<int> pps;
+	for (int i = MOVE_1; i != NUM_MOVES; i++) {
+		string moveName = mMoves[(MoveNum)i]->getMoveName();
+		if (moveName != "PLACEHOLDER") {
+			pps.push_back(getMovePP((MoveNum)i));
+		}
+	}
+	return pps;
+}
+
 void Pokemon::setMovePP(int pp, MoveNum moveSlot) {
 	mMovePP[moveSlot] = pp;
 }
@@ -429,12 +452,12 @@ void Pokemon::print() {
 	cout << "    Spd: " << mEVs[SPD] << '\n';
 
 	cout << "--------- Stats ---------\n";
-	cout << "     HP: " << getCurrentHP() << "/" << mStats[HP] << '\n';
-	cout << "    Atk: " << mStats[ATK] << " +" << mStatChanges[ATK] << '\n';
-	cout << "    Def: " << mStats[DEF] << " +" << mStatChanges[DEF] << '\n';
-	cout << "  SpAtk: " << mStats[SPATK] << " +" << mStatChanges[SPATK] << '\n';
-	cout << "  SpDef: " << mStats[SPDEF] << " +" << mStatChanges[SPDEF] << '\n';
-	cout << "    Spd: " << mStats[SPD] << " +" << mStatChanges[SPD] << '\n';
+	cout << "     HP: " << getCurrentHP() << '\n';
+	cout << "    Atk: " << mStats[ATK] << '\n';
+	cout << "    Def: " << mStats[DEF] << '\n';
+	cout << "  SpAtk: " << mStats[SPATK] << '\n';
+	cout << "  SpDef: " << mStats[SPDEF] << '\n';
+	cout << "    Spd: " << mStats[SPD] << '\n';
 
 	cout << "--------- Moves ---------\n";
 	for (int i = MOVE_1; i != NUM_MOVES; i++) {
