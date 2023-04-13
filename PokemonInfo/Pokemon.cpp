@@ -70,7 +70,6 @@ void Pokemon::initStats() {
  * @return - none, but the Pokemon object has filled in moves
  */
 void Pokemon::initMoves() {
-	cout << "initMoves()\n";
 	string moves[4] = {"PLACEHOLDER", "PLACEHOLDER", "PLACEHOLDER", "PLACEHOLDER"};
 
 	int moveSlot = 0;

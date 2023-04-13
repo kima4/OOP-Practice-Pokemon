@@ -2,13 +2,165 @@
 #include <string>
 #include <cstdlib>
 #include <math.h>
+#include <vector>
 
 #include "BattleOverview.h"
 #include "../MiscInfo/TypeInteractions.h"
 
 using namespace std;
 
-Battle::Battle(Trainer* player, Trainer* opponent) : mPlayer(player), mOpponent(opponent) {
+BattleOverview::BattleOverview(Trainer* player, Pokemon* wild) {
+	mTrainers.push_back(player);
+	mTurnNum = 0;
+}
+
+
+BattleOverview::BattleOverview(Trainer* player, Trainer* opponent) {
+	mTrainers.push_back(player);
+	mTrainers.push_back(opponent);
+	mTurnNum = 0;
+}
+
+
+void BattleOverview::battle() {
+	bool continueBattle = true;
+
+	while (!isFinished() && continueBattle) {
+		Action* playerAction = selectAction(true);
+		Action* opponentAction = selectAction(false);
+
+		if (determineOrder(playerAction, opponentAction)) {
+			continueBattle = battleStep(playerAction, opponentAction);
+		}
+		else {
+			continueBattle = battleStep(opponentAction, playerAction);
+		}
+	}
+}
+
+bool BattleOverview::battleStep(Action* action1, Action* action2) {
+	bool fled = false;
+	fled = performAction(action1);
+	mActionHistory.push_back(action1);
+	if (isFinished() || fled) {
+		return false;
+	}
+	fled = performAction(action2);
+	mActionHistory.push_back(action2);
+	if (fled) {
+		return false;
+	}
+	return true;
+}
+
+Action* BattleOverview::selectAction(bool isPlayer) {
+	return new Action(true);
+}
+
+bool BattleOverview::attackOrder(Fight* playerAction, Fight* opponentAction) {
+	int playerPriority = playerAction->getPriority();
+	int opponentPriority = opponentAction->getPriority();
+	if (playerPriority > opponentPriority) {
+		return true;
+	}
+	else if (opponentPriority > playerPriority) {
+		return false;
+	}
+	return checkSpeeds();
+}
+
+bool BattleOverview::checkSpeeds() {
+	int playerSpeed = mPlayerPokemon->getStat(SPD);
+	int opponentSpeed = mOpponentPokemon->getStat(SPD);
+	if (playerSpeed > opponentSpeed) {
+		return true;
+	}
+	else if (playerSpeed > opponentSpeed) {
+		return false;
+	}
+	int cointoss = rand() % 2;
+	if (cointoss == 0) {
+		return true;
+	}
+	return false;
+}
+
+bool BattleOverview::determineOrder(Action* playerAction, Action* opponentAction) {
+	ActionType pActionType = playerAction->getActionType();
+	ActionType oActionType = opponentAction->getActionType();
+
+	switch (pActionType) {
+	case BAG:
+		return true;
+	case SWITCH:
+		return true;
+	case FLEE:
+		return true;
+	}
+	switch (oActionType) {
+	case BAG:
+		return false;
+	case SWITCH:
+		return false;
+	case FLEE:
+		return false;
+	}
+	return attackOrder();
+}
+
+
+bool BattleOverview::performAction(Action* action) {
+
+}
+
+
+bool BattleOverview::isFinished() {
+	for (int i = 0; i < mTrainers.size(); i++) {
+		if (mTrainers[i]->getNumUsablePokemon() == 0) {
+			return true;
+		}
+	}
+	return false;
+}
+
+
+
+Action::Action(bool isPlayer) : mIsPlayer(isPlayer) {
+
+}
+
+ActionType Action::getActionType() {
+	return mActionType;
+}
+
+void Action::setActionType(ActionType actionType) {
+	mActionType = actionType;
+}
+
+Fight::Fight(bool isPlayer, Move* move) : Action(isPlayer) {
+	mMove = move;
+}
+
+int Fight::getPriority() {
+	return mMove->getPriority();
+}
+
+Switch::Switch(bool isPlayer, Pokemon* switchIn) : Action(isPlayer) {
+	setActionType(SWITCH);
+}
+
+Flee::Flee(bool isPlayer) : Action(isPlayer) {
+	setActionType(FLEE);
+}
+
+
+
+
+
+
+
+
+/*Battle::Battle(Trainer* player, Trainer* opponent) : mPlayer(player), mOpponent(opponent) {
 	mPlayerPokemon = player->getLead();
 	mOpponentPokemon = opponent->getLead();
 	mIsWild = false;
@@ -195,5 +347,6 @@ bool Battle::flee() {
 	}
 	mEscapeAttempts++;
 	return false;
-}
+}*/
+
 

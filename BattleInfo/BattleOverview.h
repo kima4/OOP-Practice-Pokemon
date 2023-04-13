@@ -2,17 +2,105 @@
 #define BATTLEOVERVIEW_H
 
 #include <string>
+#include <vector>
 
 #include "../TrainerInfo/Trainer.h"
 
-class Battle {
+enum ActionType { FIGHT, BAG, SWITCH, FLEE };
+
+class Action {
+public:
+	Action(bool isPlayer);
+	ActionType getActionType();
+	void setActionType(ActionType actionType);
+
+
+private:
+	ActionType mActionType;
+	bool mIsPlayer;
+
+
+
+};
+
+class Fight : public Action {
+public:
+	Fight(bool isPlayer, Move* move);
+	int getPriority();
+
+private:
+	//int mPriority;
+	Move* mMove;
+
+};
+
+class Bag : public Action {
+public:
+	//Bag();
+
+private:
+	//Item mItem;
+
+};
+
+class Switch : public Action {
+public:
+	Switch(bool isPlayer, Pokemon* switchIn);
+
+private:
+
+
+};
+
+class Flee : public Action {
+public:
+	Flee(bool isPlayer);
+
+private:
+
+
+};
+
+
+class BattleOverview {
+public:
+	BattleOverview(Trainer* player, Pokemon* wild);
+	BattleOverview(Trainer* player, Trainer* opponent);
+
+	void battle();
+	bool battleStep(Action* action1, Action* action2);
+	Action* selectAction(bool isPlayer);
+	bool attackOrder(Action* playerAction, Action* opponentAction);
+	bool checkSpeeds();
+	bool determineOrder(Action* playerAction, Action* opponentAction);
+	bool performAction(Action* action);
+
+	bool isFinished();
+
+private:
+	vector<Trainer*> mTrainers;
+
+	Pokemon* mPlayerPokemon;
+	Pokemon* mOpponentPokemon;
+
+	//Battle mBattle;
+	vector<Action*> mActionHistory;
+	int mTurnNum;
+
+};
+
+
+
+
+
+/*class Battle {
 public:
 	Battle(Trainer* player, Trainer* opponent);
 	Battle(Trainer* player, Pokemon* wild);
 
 	/**
 	 * Battle menu options 
-	 */
+	 * /
 
 	// fight
 	Move** getMoves();
@@ -42,8 +130,7 @@ private:
 	bool mIsWild;
 	int mNumTurns;
 
-	Trainer* mPlayer;
-	Trainer* mOpponent;
+
 
 	Pokemon* mPlayerPokemon;
 	Pokemon* mOpponentPokemon;
@@ -53,6 +140,9 @@ private:
 
 	int mEscapeAttempts;
 
-};
+};*/
+
+
+
 
 #endif

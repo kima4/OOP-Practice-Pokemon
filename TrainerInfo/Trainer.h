@@ -2,6 +2,7 @@
 #define TRAINER_H
 
 #include <string>
+#include <vector>
 
 #include "../PokemonInfo/Pokemon.h"
 
@@ -11,9 +12,10 @@ class Trainer {
 public:
 
 	Trainer(string name);
+	Trainer(string name, vector<Pokemon*> party);
 
 	string getTrainerName();
-	Pokemon** getPokemon();
+	vector<Pokemon*> getParty();
 	int getNumPokemon();
 	int getNumUsablePokemon();
 
@@ -22,7 +24,7 @@ public:
 
 private:
 	string mName;
-	Pokemon* mPokemon[6];
+	vector<Pokemon*> mParty;
 	int mNumPokemon;
 	int mNumUsablePokemon;
 };

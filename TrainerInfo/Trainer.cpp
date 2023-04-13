@@ -9,12 +9,18 @@ Trainer::Trainer(string name) : mName(name) {
 
 }
 
+Trainer::Trainer(string name, vector<Pokemon*> party) : mName(name), mParty(party) {
+	mNumPokemon = party.size();
+	mNumUsablePokemon = mNumPokemon;
+}
+
+
 string Trainer::getTrainerName() {
 	return mName;
 }
 
-Pokemon** Trainer::getPokemon() {
-	return mPokemon;
+vector<Pokemon*> Trainer::getParty() {
+	return mParty;
 }
 
 int Trainer::getNumPokemon() {
@@ -26,5 +32,5 @@ int Trainer::getNumUsablePokemon() {
 }
 
 Pokemon* Trainer::getLead() {
-	return mPokemon[0];
+	return mParty[0];
 }
