@@ -168,12 +168,20 @@ void CreateTackle() {
 // creating individual staryu and moves
 void StaryuMoves() {
 	Pokemon* staryu = new Pokemon("Staryu", 43);
-	Move* move1 = new Move("Water Gun");
-	staryu->setMove(move1, 0);
+	staryu->learnMove("Water Gun", 0);
 	int result = staryu->getMove(0)->getBasePower();
 	int expected = 40;
 	staryu->print();
 	IS_TRUE(result == expected);
+}
+
+// creating individual dragonite and checking move initiation
+void DragoniteMoves() {
+	Pokemon* dragonite = new Pokemon("Dragonite", 8);
+	//int result = dragonite->getMove(0)->getBasePower();
+	int expected = 0;
+	dragonite->print();
+	//IS_TRUE(result == expected);
 }
 
 
@@ -203,6 +211,7 @@ int main() {
 
 	CreateTackle();
 	StaryuMoves();
+	DragoniteMoves();
 
 
 	return 0;

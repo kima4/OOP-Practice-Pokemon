@@ -7,7 +7,7 @@ Testing.o: Testing.cpp Testing.h ../MiscInfo/Types.h
 	g++ -c Testing.cpp
 
 Types.o: ../MiscInfo/Types.cpp ../MiscInfo/Types.h
-	g++ -c  ../MiscInfo/Types.cpp
+	g++ -c ../MiscInfo/Types.cpp
 
 TypeInteractions.o: ../MiscInfo/TypeInteractions.cpp ../MiscInfo/TypeInteractions.h ../MiscInfo/Types.h
 	g++ -c ../MiscInfo/TypeInteractions.cpp

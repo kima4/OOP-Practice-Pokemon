@@ -29,6 +29,13 @@ Move** Battle::getMoves() {
 	return mPlayerPokemon->getMoves();
 }
 
+bool Battle::checkAttackUsability(int moveSlot) {
+	if (!(mAttackingPokemon->getMovePP(moveSlot) > 0)) {
+		return false;
+	}
+	return true;
+}
+
 double Battle::getStatChangeVal(bool isNormalStat, int statChange) {
 	int baseVal;
 	if (isNormalStat) {
@@ -97,17 +104,20 @@ double Battle::calcEffectiveness(Type moveType) {
 	return getMultiplier(moveType, defenderTypes[0], defenderTypes[1]);
 }
 
-double Battle::critBonus(bool highCritRatio) {
+double Battle::critBonus(int critRatio) {
 	int critTable[5] = { 3, 6, 12, 16, 24 };
 	int critLevel = mAttackingPokemon->getStatChange(CRIT);
-	if (highCritRatio) {
+	if (critRatio > 0) {
 		critLevel++;
+	}
+	else if (critRatio < 0) {
+		return 1;
 	}
 	if (critLevel > 4) {
 		critLevel = 4;
 	}
 	int critChance = critTable[critLevel];
-	int critVal = rand % 48;
+	int critVal = rand() % 48;
 
 	if (critChance <= critVal) {
 		return 1;
@@ -125,21 +135,19 @@ void Battle::doDamage(int damage) {
 }
 
 bool Battle::makeAttack(int moveSlot) {
-	if (!(mAttackingPokemon->getMovePP(moveSlot) > 0)) {
-		return false;
-	}
 	Move* move = mAttackingPokemon->getMove(moveSlot);
 
 	double hitChance = getAccuracy(move);
 	int hitVal = rand() % 101;
 	if (hitChance < hitVal) {
 		// attack missed
-		return true;
+		return false;
 	}
+
 	double damageMultiplier = calcEffectiveness(move->getType());
 	if (damageMultiplier == 0) {
 		// attack ineffective
-		return true;
+		return false;
 	}
 
 	double critMultiplier = critBonus(false); //TODO: implement moves with special effects
@@ -188,3 +196,4 @@ bool Battle::flee() {
 	mEscapeAttempts++;
 	return false;
 }
+

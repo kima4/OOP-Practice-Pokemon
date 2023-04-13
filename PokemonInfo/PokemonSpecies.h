@@ -4,6 +4,8 @@
 #include <string>
 #include <tuple>
 #include <map>
+#include <vector>
+#include <utility>
 
 #include "../MiscInfo/Types.h"
 #include "BreedingInfo/Breeding.h"
@@ -21,6 +23,7 @@ public:
 	void initTypes(string species);
 	void initStats(string species);
 	void initBreeding(string species);
+	void initMoves(string species);
 
 	// prints species information
 	void print();
@@ -43,7 +46,8 @@ public:
 	int getBaseSpd();
 	int* getBaseStats();
 
-
+	// gets move information
+	vector<string> getMovesAt(int level);
 
 protected:
 	unsigned int mDexNum;
@@ -57,6 +61,9 @@ protected:
 	int mGenderRatio;
 	EggGroup mEggGroups[2];
 	int mEggCycles;
+
+	vector<pair<int, string>> mLearnset;
+
 
 };
 

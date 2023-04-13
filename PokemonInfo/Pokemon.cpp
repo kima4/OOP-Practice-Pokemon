@@ -2,9 +2,12 @@
 #include <string>
 #include <tuple>
 #include <cstdlib>
+#include <vector>
+#include <algorithm>
 
 #include "Pokemon.h"
 #include "PokemonList.h"
+#include "../MoveInfo/MoveList.h"
 
 /**
  * Create a Pokemon object
@@ -14,7 +17,7 @@
  * @return - a new Pokemon object
  */
 Pokemon::Pokemon(string species, int level) {
-	mSpecies = SpeciesList.at(species);
+	setSpecies(species);
 	setLevel(level);
 	setNickname(species);
 	setGender();
@@ -67,11 +70,30 @@ void Pokemon::initStats() {
  * @return - none, but the Pokemon object has filled in moves
  */
 void Pokemon::initMoves() {
-	Move* move1 = new Move("PLACEHOLDER");
-	Move* move2 = new Move("PLACEHOLDER");
-	Move* move3 = new Move("PLACEHOLDER");
-	Move* move4 = new Move("PLACEHOLDER");
-	Move* moves[4] = { move1, move2, move3, move4 };
+	cout << "initMoves()\n";
+	string moves[4] = {"PLACEHOLDER", "PLACEHOLDER", "PLACEHOLDER", "PLACEHOLDER"};
+
+	int moveSlot = 0;
+
+	for (int i = mLevel; i > 0; i--) {
+		vector<string> learnedMoves = mSpecies->getMovesAt(i);
+		if (learnedMoves.empty()) {
+			continue;
+		}
+
+		random_shuffle(learnedMoves.begin(), learnedMoves.end());
+
+		while (learnedMoves.size() > (4 - moveSlot)) {
+			learnedMoves.erase(learnedMoves.end() - 1);
+		}
+		for (int j = 0; j < learnedMoves.size(); j++) {
+			moves[moveSlot] = learnedMoves[j];
+			moveSlot++;
+		}
+		if (moveSlot > 3) {
+			break;
+		}
+	}
 
 	setMoves(moves);
 }
@@ -79,6 +101,16 @@ void Pokemon::initMoves() {
 /**
  * Basic information getters and setters
  */
+
+void Pokemon::setSpecies(string species) {
+	try {
+		mSpecies = SpeciesList.at(species);
+	}
+	catch (const out_of_range& e) {
+		SpeciesList[species] = new PokemonSpecies(species);
+		mSpecies = SpeciesList.at(species);
+	}
+}
 
 PokemonSpecies* Pokemon::getSpecies() {
 	return mSpecies;
@@ -274,8 +306,24 @@ Move** Pokemon::getMoves() {
 	return mMoves;
 }
 
+void Pokemon::setMove(string moveName, int moveSlot) {
+	try {
+		mMoves[moveSlot] = MoveList.at(moveName);
+	}
+	catch (const out_of_range& e) {
+		MoveList[moveName] = new Move(moveName);
+		mMoves[moveSlot] = MoveList.at(moveName);
+	}
+}
+
 void Pokemon::setMove(Move* move, int moveSlot) {
 	mMoves[moveSlot] = move;
+}
+
+void Pokemon::setMoves(string moveNames[4]) {
+	for (int i = 0; i < 4; i++) {
+		setMove(moveNames[i], i);
+	}
 }
 
 void Pokemon::setMoves(Move* moves[4]) {
@@ -306,6 +354,11 @@ void Pokemon::setMovePP(int pp, int moveSlot) {
 void Pokemon::decMovePP(int moveSlot) {
 	int pp = getMovePP(moveSlot) - 1;
 	setMovePP(pp, moveSlot);
+}
+
+void Pokemon::learnMove(string moveName, int moveSlot) {
+	setMove(moveName, moveSlot);
+	refillMove(moveSlot);
 }
 
 /**

@@ -5,7 +5,6 @@
 
 #include "../TrainerInfo/Trainer.h"
 
-
 class Battle {
 public:
 	Battle(Trainer* player, Trainer* opponent);
@@ -17,13 +16,14 @@ public:
 
 	// fight
 	Move** getMoves();
+	bool checkAttackUsability(int moveSlot);
 	double getStatChangeVal(bool isNormalStat, int statChange);
 	double getAccuracy(Move* move);
 	double calcAtkToDef(Category category, double crit);
 	double stabBonus(Type moveType);
 	double calcDamage(Move* move, double crit);
 	double calcEffectiveness(Type moveType);
-	double critBonus(bool highCritRatio);
+	double critBonus(int critRatio);
 	void doDamage(int damage);
 	bool makeAttack(int moveSlot);
 	
@@ -36,6 +36,7 @@ public:
 
 	// flee
 	bool flee();
+
 
 private:
 	bool mIsWild;
@@ -53,10 +54,5 @@ private:
 	int mEscapeAttempts;
 
 };
-
-
-
-
-
 
 #endif

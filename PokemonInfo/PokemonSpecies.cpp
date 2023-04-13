@@ -5,6 +5,7 @@
 #include "../MiscInfo/Types.h"
 #include "PokemonSpecies.h"
 #include "PokemonDatabase.h"
+#include "PokemonMoveList.h"
 
 using namespace std;
 
@@ -17,6 +18,8 @@ using namespace std;
 PokemonSpecies::PokemonSpecies(string species) : mSpecies(species) {
 	initTypes(species);
 	initStats(species);
+	initBreeding(species);
+	initMoves(species);
 }
 
 /**
@@ -59,6 +62,16 @@ void PokemonSpecies::initBreeding(string species) {
 	mEggGroups[0] = get<1>(breeding);
 	mEggGroups[1] = get<2>(breeding);
 	mEggCycles = get<3>(breeding);
+}
+
+/**
+ * Set the move information information of the specified pokemon
+ *
+ * @param species - the species name
+ * @return - none, but the PokemonSpecies object has filled in move information
+ */
+void PokemonSpecies::initMoves(string species) {
+	mLearnset = PokemonLearnset.at(species);
 }
 
 /**
@@ -117,4 +130,17 @@ int PokemonSpecies::getBaseSpd() {
 }
 int* PokemonSpecies::getBaseStats() {
 	return mBaseStats;
+}
+
+/**
+ * Move learnset information getters
+ */
+vector<string> PokemonSpecies::getMovesAt(int level) {
+	vector<string> learnedMoves;
+	for (auto const& p : mLearnset) {
+		if (p.first == level) {
+			learnedMoves.push_back(p.second);
+		}
+	}
+	return learnedMoves;
 }

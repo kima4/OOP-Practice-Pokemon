@@ -22,6 +22,7 @@ public:
 	void initStats();
 	void initMoves();
 
+	void setSpecies(string species);
 	PokemonSpecies* getSpecies();
 
 	int getLevel();
@@ -79,13 +80,16 @@ public:
 	// moves
 	Move* getMove(int moveSlot);
 	Move** getMoves();
+	void setMove(string moveName, int moveSlot);
 	void setMove(Move* move, int moveSlot);
+	void setMoves(string moveNames[4]);
 	void setMoves(Move* moves[4]);
 	void refillMove(int moveSlot);
 	void refillMoves();
 	int getMovePP(int moveSlot);
 	void setMovePP(int pp, int moveSlot);
 	void decMovePP(int moveSlot);
+	void learnMove(string moveName, int moveSlot);
 
 	void print();
 
