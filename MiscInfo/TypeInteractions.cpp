@@ -9,6 +9,7 @@ map<Type, map<Type, double>> TypeChart = {
 		{ STEEL, 0.5 }
 	}},
 	{ FIGHTING, map<Type, double>{
+		{ NORMAL, 2 },
 		{ FLYING, 0.5 },
 		{ POISON, 0.5 },
 		{ ROCK, 2 },

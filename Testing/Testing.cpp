@@ -233,8 +233,8 @@ void ActionTypeCheck() {
 
 void FightMoveChoice() {
 	vector<Pokemon*> party;
-	Pokemon* cleffa = new Pokemon("Cleffa", 92);
-	party.push_back(cleffa);
+	Pokemon* machamp = new Pokemon("Machamp", 92);
+	party.push_back(machamp);
 	Trainer* trainer = new Trainer("William", party);
 	Pokemon* wild = new Pokemon("Sentret", 2);
 	BattleOverview* battle = new BattleOverview(trainer, wild);
@@ -250,7 +250,7 @@ void FightMoveChoice() {
 int main() {
 
 	srand(time(0));
-
+	/*
 	cout << "------------------ TypeInfo Tests ------------------\n";
 
 	ConvertFireToString();
@@ -282,7 +282,7 @@ int main() {
 	cout << "------------------ BattleInfo Tests ------------------\n";
 
 	BattleTest();
-	ActionTypeCheck();
+	ActionTypeCheck();*/
 	FightMoveChoice();
 
 	return 0;

@@ -77,6 +77,8 @@ public:
 	virtual void execute();
 	bool isPlayerAction();
 	BattleOverview& getBattleRef();
+	virtual void print();
+
 
 
 private:
@@ -94,14 +96,33 @@ public:
 	Fight(BattleOverview& battle, bool isPlayer, Move* move);
 	int getPriority();
 
-	void execute();
+	
 	bool selectMove();
 
+	int getAttackerStatChange(Stat stat);
+	int getDefenderStatChange(Stat stat);
 
+	double calcStatChangeMult(Stat stat, int statChange);
+
+	double calcAccuracy(int acc);
+	double calcEffectiveness(Type moveType);
+	double calcCrit(int critRatio);
+	double calcAtkToDef(double crit);
+	double calcSTAB(Type moveType);
+	double calcDamage(double crit);
+	
+	void doDamage(int damage);
+	void makeAttack();
+
+	void execute();
+
+	void print();
 
 private:
 	//int mPriority;
 	Move* mMove;
+	Pokemon* mAttacker;
+	Pokemon* mDefender;
 
 };
 

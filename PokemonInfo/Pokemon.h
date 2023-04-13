@@ -73,6 +73,9 @@ public:
 
 	int getCurrentHP();
 	void setCurrentHP(int hp);
+	void takeDamage(int damage);
+	void restoreHP(int healing);
+	void fullyHeal();
 	bool isFainted();
 
 	// moves
@@ -86,9 +89,11 @@ public:
 	void setMoves(string moveNames[NUM_MOVES]);
 	void setMoves(Move* moves[NUM_MOVES]);
 	void setMoves(vector<string> moves);
+
 	void refillMove(MoveNum moveSlot);
 	void refillMoves();
 	int getMovePP(MoveNum moveSlot);
+	vector<int> getMovesPP();
 	void setMovePP(int pp, MoveNum moveSlot);
 	void decMovePP(MoveNum moveSlot);
 	bool alreadyKnows(string moveName);
