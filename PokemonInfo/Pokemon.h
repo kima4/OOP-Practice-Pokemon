@@ -73,16 +73,13 @@ public:
 
 	int getCurrentHP();
 	void setCurrentHP(int hp);
-
-	int getStatChange(Stat stat);
-	void setStatChange(Stat stat, int change);
-	void addStatChange(Stat stat, int change);
-	void resetStatChanges();
+	bool isFainted();
 
 	// moves
 	Move* getMove(MoveNum moveSlot);
 	string getMoveName(MoveNum moveSlot);
-	Move** getMoves();
+	vector<Move*> getMoves();
+	//Move** getMoves();
 	vector<string> getMoveNames();
 	void setMove(string moveName, MoveNum moveSlot);
 	void setMove(Move* move, MoveNum moveSlot);
@@ -114,7 +111,6 @@ private:
 	// stats
 	int mStats[NUM_STATS];
 	int mCurrentHP;
-	int mStatChanges[NUM_STAT_CHANGES];
 
 	// moves
 	Move* mMoves[NUM_MOVES];

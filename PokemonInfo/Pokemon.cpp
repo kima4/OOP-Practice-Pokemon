@@ -280,27 +280,11 @@ void Pokemon::setCurrentHP(int hp) {
 	mCurrentHP = hp;
 }
 
-
-/**
- * Stat change getters and setters
- */
-int Pokemon::getStatChange(Stat stat) {
-	return mStatChanges[stat];
-}
-
-void Pokemon::setStatChange(Stat stat, int change) {
-	mStatChanges[stat] = change;
-}
-
-void Pokemon::addStatChange(Stat stat, int change) {
-	int prevChange = getStatChange(stat);
-	setStatChange(stat, prevChange + change);
-}
-
-void Pokemon::resetStatChanges() {
-	for (int i = 1; i < NUM_STAT_CHANGES; i++) {
-		mStatChanges[i] = 0;
+bool Pokemon::isFainted() {
+	if (getCurrentHP() < 1) {
+		return true;
 	}
+	return false;
 }
 
 /**
@@ -314,9 +298,18 @@ string Pokemon::getMoveName(MoveNum moveSlot) {
 	return mMoves[moveSlot]->getMoveName();
 }
 
-Move** Pokemon::getMoves() {
-	return mMoves;
+vector<Move*> Pokemon::getMoves() {
+	vector<Move*> moves;
+	for (int i = MOVE_1; i != NUM_MOVES; i++) {
+		if (getMoveName((MoveNum)i) != "PLACEHOLDER") {
+			moves.push_back(mMoves[(MoveNum)i]);
+		}
+	}
+	return moves;
 }
+/*Move** Pokemon::getMoves() {
+	return mMoves;
+}*/
 
 vector<string> Pokemon::getMoveNames() {
 	vector<string> moveNames;

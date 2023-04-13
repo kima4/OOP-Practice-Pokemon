@@ -3,23 +3,86 @@
 
 #include <string>
 #include <vector>
+#include <stack>
 
 #include "../TrainerInfo/Trainer.h"
 
-enum ActionType { FIGHT, BAG, SWITCH, FLEE };
+enum ActionType { FIGHT, BAG, SWITCH, FLEE, MISTAKE };
+
+class Action;
+class Fight;
+class Bag;
+class Switch;
+class Flee;
+
+
+
+class BattleOverview {
+public:
+	BattleOverview(Trainer* player, Pokemon* wild);
+	BattleOverview(Trainer* player, Trainer* opponent);
+
+	//void startBattle(Pokemon* pPokemon, Pokemon* oPokemon);
+	void battle();
+	void battleStep(Action* action1, Action* action2);
+	Action* selectAction(bool isPlayer);
+	int selectOption(int min, int max);
+	Action* createAction(bool isPlayer, int choice);
+	Action* getLastAction();
+
+	bool attackOrder(Fight* playerAction, Fight* opponentAction);
+	bool checkSpeeds();
+	bool determineOrder(Action* playerAction, Action* opponentAction);
+	void performAction(Action* action);
+	
+	Trainer* getTrainer(bool isPlayer);
+	Pokemon* getPlayerPokemon();
+	Pokemon* getOpponentPokemon();
+
+	int getStatChange(bool isPlayer, Stat stat);
+	void setStatChange(bool isPlayer, Stat stat, int statChange);
+	void addStatChanges(bool isPlayer, int* statChanges);
+	void resetStatChanges(bool isPlayer);
+
+
+	bool isWild();
+	
+	int getTurnNum();
+	
+	bool isFinished();
+
+private:
+	vector<Trainer*> mTrainers;
+
+	//Battle* mBattle;
+	Pokemon* mPlayerPokemon;
+	Pokemon* mOpponentPokemon;
+
+	int mPStatChanges[NUM_STAT_CHANGES];
+	int mOStatChanges[NUM_STAT_CHANGES];
+
+	bool mIsWild;
+
+	stack<Action*> mToDo;
+	vector<Action*> mActionHistory;
+	int mTurnNum;
+
+};
 
 class Action {
 public:
-	Action(bool isPlayer);
+	Action(BattleOverview& battle, bool isPlayer);
 	ActionType getActionType();
 	void setActionType(ActionType actionType);
 	virtual void execute();
-	virtual ~Action() {};
+	bool isPlayerAction();
+	BattleOverview& getBattleRef();
 
 
 private:
 	ActionType mActionType;
 	bool mIsPlayer;
+	BattleOverview& mBattle;
 
 
 
@@ -27,12 +90,12 @@ private:
 
 class Fight : public virtual Action {
 public:
-	Fight(bool isPlayer);
-	Fight(bool isPlayer, Move* move);
+	Fight(BattleOverview& battle, bool isPlayer);
+	Fight(BattleOverview& battle, bool isPlayer, Move* move);
 	int getPriority();
-	
+
 	void execute();
-	Move* selectMove();
+	bool selectMove();
 
 
 
@@ -53,7 +116,7 @@ private:
 
 class Switch : public virtual Action {
 public:
-	Switch(bool isPlayer);
+	Switch(BattleOverview& battle, bool isPlayer);
 
 private:
 
@@ -62,112 +125,13 @@ private:
 
 class Flee : public virtual Action {
 public:
-	Flee(bool isPlayer);
+	Flee(BattleOverview& battle, bool isPlayer);
 	bool wasSuccessful();
 
 private:
 	bool mSuccess;
 
 };
-
-
-class Battle {
-public:
-	Battle(Pokemon* pPokemon, Pokemon* oPokemon, bool isWild);
-	bool attackOrder(Fight* playerAction, Fight* opponentAction);
-	bool checkSpeeds();
-	bool determineOrder(Action* playerAction, Action* opponentAction);
-	void performAction(Action* action);
-
-private:
-	Pokemon* mPlayerPokemon;
-	Pokemon* mOpponentPokemon;
-
-	bool mIsWild;
-
-};
-
-
-class BattleOverview {
-public:
-	BattleOverview(Trainer* player, Pokemon* wild);
-	BattleOverview(Trainer* player, Trainer* opponent);
-
-	void startBattle(Pokemon* pPokemon, Pokemon* oPokemon);
-	void battle();
-	void battleStep(Action* action1, Action* action2);
-	Action* selectAction(bool isPlayer);
-	
-	
-	
-
-	Action* getLastAction();
-
-	bool isFinished();
-
-private:
-	vector<Trainer*> mTrainers;
-
-	Battle* mBattle;
-
-	vector<Action*> mActionHistory;
-	int mTurnNum;
-
-};
-
-
-
-
-
-/*class Battle {
-public:
-	Battle(Trainer* player, Trainer* opponent);
-	Battle(Trainer* player, Pokemon* wild);
-
-	/**
-	 * Battle menu options 
-	 * /
-
-	// fight
-	Move** getMoves();
-	bool checkAttackUsability(int moveSlot);
-	double getStatChangeVal(bool isNormalStat, int statChange);
-	double getAccuracy(Move* move);
-	double calcAtkToDef(Category category, double crit);
-	double stabBonus(Type moveType);
-	double calcDamage(Move* move, double crit);
-	double calcEffectiveness(Type moveType);
-	double critBonus(int critRatio);
-	void doDamage(int damage);
-	bool makeAttack(int moveSlot);
-	
-	// pokemon
-	Pokemon** getPokemon();
-	bool switchPokemon(Pokemon* switchIn);
-
-	// bag
-
-
-	// flee
-	bool flee();
-
-
-private:
-	bool mIsWild;
-	int mNumTurns;
-
-
-
-	Pokemon* mPlayerPokemon;
-	Pokemon* mOpponentPokemon;
-
-	Pokemon* mAttackingPokemon;
-	Pokemon* mDefendingPokemon;
-
-	int mEscapeAttempts;
-
-};*/
-
 
 
 
