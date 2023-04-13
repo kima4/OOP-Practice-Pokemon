@@ -30,6 +30,11 @@ public:
 	Fight(bool isPlayer);
 	Fight(bool isPlayer, Move* move);
 	int getPriority();
+	
+	void execute();
+	Move* selectMove();
+
+
 
 private:
 	//int mPriority;
@@ -68,7 +73,7 @@ private:
 
 class Battle {
 public:
-	Battle(Pokemon* pPokemon, Pokemon* oPokemon);
+	Battle(Pokemon* pPokemon, Pokemon* oPokemon, bool isWild);
 	bool attackOrder(Fight* playerAction, Fight* opponentAction);
 	bool checkSpeeds();
 	bool determineOrder(Action* playerAction, Action* opponentAction);
@@ -77,6 +82,9 @@ public:
 private:
 	Pokemon* mPlayerPokemon;
 	Pokemon* mOpponentPokemon;
+
+	bool mIsWild;
+
 };
 
 

@@ -65,7 +65,8 @@ void Pokemon::initStats() {
 }
 
 /**
- * Sets the moves of the Pokemon object
+ * Sets the moves of the Pokemon object. 
+ * Finds the last four moves the Pokemon would learn from leveling up.
  *
  * @return - none, but the Pokemon object has filled in moves
  */
@@ -386,6 +387,7 @@ void Pokemon::decMovePP(MoveNum moveSlot) {
 	setMovePP(pp, moveSlot);
 }
 
+// true if the pokemon already knows that move
 bool Pokemon::alreadyKnows(string moveName) {
 	vector<string> moveNames = getMoveNames();
 
