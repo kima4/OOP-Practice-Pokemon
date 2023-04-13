@@ -11,6 +11,7 @@ using namespace std;
 
 BattleOverview::BattleOverview(Trainer* player, Pokemon* wild) {
 	mTrainers.push_back(player);
+	startBattle(player->getLead(), wild);
 	mTurnNum = 0;
 }
 
@@ -18,108 +19,85 @@ BattleOverview::BattleOverview(Trainer* player, Pokemon* wild) {
 BattleOverview::BattleOverview(Trainer* player, Trainer* opponent) {
 	mTrainers.push_back(player);
 	mTrainers.push_back(opponent);
+	startBattle(player->getLead(), opponent->getLead());
 	mTurnNum = 0;
 }
 
 
-void BattleOverview::battle() {
-	bool continueBattle = true;
+void BattleOverview::startBattle(Pokemon* pPokemon, Pokemon* oPokemon) {
+	mBattle = new Battle(pPokemon, oPokemon);
+}
 
-	while (!isFinished() && continueBattle) {
+
+void BattleOverview::battle() {
+	while (!isFinished()) {
 		Action* playerAction = selectAction(true);
 		Action* opponentAction = selectAction(false);
 
-		if (determineOrder(playerAction, opponentAction)) {
-			continueBattle = battleStep(playerAction, opponentAction);
+		if (mBattle->determineOrder(playerAction, opponentAction)) {
+			battleStep(playerAction, opponentAction);
 		}
 		else {
-			continueBattle = battleStep(opponentAction, playerAction);
+			battleStep(opponentAction, playerAction);
 		}
 	}
 }
 
-bool BattleOverview::battleStep(Action* action1, Action* action2) {
-	bool fled = false;
-	fled = performAction(action1);
+void BattleOverview::battleStep(Action* action1, Action* action2) {
+	mBattle->performAction(action1);
 	mActionHistory.push_back(action1);
-	if (isFinished() || fled) {
-		return false;
+	if (isFinished()) {
+		return;
 	}
-	fled = performAction(action2);
+	mBattle->performAction(action2);
 	mActionHistory.push_back(action2);
-	if (fled) {
-		return false;
-	}
-	return true;
+	return;
 }
 
 Action* BattleOverview::selectAction(bool isPlayer) {
-	return new Action(true);
-}
-
-bool BattleOverview::attackOrder(Fight* playerAction, Fight* opponentAction) {
-	int playerPriority = playerAction->getPriority();
-	int opponentPriority = opponentAction->getPriority();
-	if (playerPriority > opponentPriority) {
-		return true;
+	int choice;
+	cin >> choice;
+	while (choice < 1 || choice > 4) {
+		cout << "Invalid choice. Choose again: " << endl;
+		cin >> choice;
 	}
-	else if (opponentPriority > playerPriority) {
-		return false;
+	switch (choice) {
+	case 1:
+		return new Fight(isPlayer);
+	case 2:
+		//return new Bag();
+	case 3:
+		return new Switch(isPlayer);
+	case 4:
+		return new Flee(isPlayer);
 	}
-	return checkSpeeds();
-}
-
-bool BattleOverview::checkSpeeds() {
-	int playerSpeed = mPlayerPokemon->getStat(SPD);
-	int opponentSpeed = mOpponentPokemon->getStat(SPD);
-	if (playerSpeed > opponentSpeed) {
-		return true;
-	}
-	else if (playerSpeed > opponentSpeed) {
-		return false;
-	}
-	int cointoss = rand() % 2;
-	if (cointoss == 0) {
-		return true;
-	}
-	return false;
-}
-
-bool BattleOverview::determineOrder(Action* playerAction, Action* opponentAction) {
-	ActionType pActionType = playerAction->getActionType();
-	ActionType oActionType = opponentAction->getActionType();
-
-	switch (pActionType) {
-	case BAG:
-		return true;
-	case SWITCH:
-		return true;
-	case FLEE:
-		return true;
-	}
-	switch (oActionType) {
-	case BAG:
-		return false;
-	case SWITCH:
-		return false;
-	case FLEE:
-		return false;
-	}
-	return attackOrder();
+	cout << "Something went wrong in BattleOverview::selectAction()." << endl;
+	return new Action(isPlayer);
 }
 
 
-bool BattleOverview::performAction(Action* action) {
-
+Action* BattleOverview::getLastAction() {
+	return mActionHistory.back();
 }
 
-
+// true if battle is over
 bool BattleOverview::isFinished() {
+	// check if either side is out of pokemon
 	for (int i = 0; i < mTrainers.size(); i++) {
 		if (mTrainers[i]->getNumUsablePokemon() == 0) {
 			return true;
 		}
 	}
+
+	// check if someone fled successfully
+	Action* lastAction = getLastAction();
+	if (lastAction->getActionType() == FLEE) {
+		Flee* fleeAction = dynamic_cast<Flee*>(getLastAction());
+		if (fleeAction->wasSuccessful()) {
+			return true;
+		}
+	}
+
 	return false;
 }
 
@@ -137,6 +115,16 @@ void Action::setActionType(ActionType actionType) {
 	mActionType = actionType;
 }
 
+void Action::execute() {
+	cout << "An action is executed" << endl;
+}
+
+
+
+Fight::Fight(bool isPlayer) : Action(isPlayer) {
+
+}
+
 Fight::Fight(bool isPlayer, Move* move) : Action(isPlayer) {
 	mMove = move;
 }
@@ -145,7 +133,10 @@ int Fight::getPriority() {
 	return mMove->getPriority();
 }
 
-Switch::Switch(bool isPlayer, Pokemon* switchIn) : Action(isPlayer) {
+
+
+
+Switch::Switch(bool isPlayer) : Action(isPlayer) {
 	setActionType(SWITCH);
 }
 
@@ -153,10 +144,70 @@ Flee::Flee(bool isPlayer) : Action(isPlayer) {
 	setActionType(FLEE);
 }
 
+bool Flee::wasSuccessful() {
+	return mSuccess;
+}
 
+Battle::Battle(Pokemon* pPokemon, Pokemon* oPokemon) : mPlayerPokemon(pPokemon), mOpponentPokemon(oPokemon) {
 
+}
 
+// true if player goes first
+bool Battle::attackOrder(Fight* playerAction, Fight* opponentAction) {
+	int playerPriority = playerAction->getPriority();
+	int opponentPriority = opponentAction->getPriority();
+	if (playerPriority > opponentPriority) {
+		return true;
+	}
+	else if (opponentPriority > playerPriority) {
+		return false;
+	}
+	return checkSpeeds();
+}
 
+// true if player goes first
+bool Battle::checkSpeeds() {
+	int playerSpeed = mPlayerPokemon->getStat(SPD);
+	int opponentSpeed = mOpponentPokemon->getStat(SPD);
+	if (playerSpeed > opponentSpeed) {
+		return true;
+	}
+	else if (playerSpeed > opponentSpeed) {
+		return false;
+	}
+	int cointoss = rand() % 2;
+	if (cointoss == 0) {
+		return true;
+	}
+	return false;
+}
+
+// true if player goes first
+bool Battle::determineOrder(Action* playerAction, Action* opponentAction) {
+	ActionType pActionType = playerAction->getActionType();
+	ActionType oActionType = opponentAction->getActionType();
+
+	switch (pActionType) {
+	case BAG:
+	case SWITCH:
+	case FLEE:
+		return true;
+	}
+	switch (oActionType) {
+	case BAG:
+	case SWITCH:
+	case FLEE:
+		return false;
+	}
+	Fight* playerAttack = dynamic_cast<Fight*>(playerAction);
+	Fight* opponentAttack = dynamic_cast<Fight*>(opponentAction);
+	return attackOrder(playerAttack, opponentAttack);
+}
+
+// 
+void Battle::performAction(Action* action) {
+
+}
 
 
 

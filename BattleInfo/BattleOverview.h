@@ -13,6 +13,8 @@ public:
 	Action(bool isPlayer);
 	ActionType getActionType();
 	void setActionType(ActionType actionType);
+	virtual void execute();
+	virtual ~Action() {};
 
 
 private:
@@ -23,8 +25,9 @@ private:
 
 };
 
-class Fight : public Action {
+class Fight : public virtual Action {
 public:
+	Fight(bool isPlayer);
 	Fight(bool isPlayer, Move* move);
 	int getPriority();
 
@@ -34,7 +37,7 @@ private:
 
 };
 
-class Bag : public Action {
+class Bag : public virtual Action {
 public:
 	//Bag();
 
@@ -43,22 +46,37 @@ private:
 
 };
 
-class Switch : public Action {
+class Switch : public virtual Action {
 public:
-	Switch(bool isPlayer, Pokemon* switchIn);
+	Switch(bool isPlayer);
 
 private:
 
 
 };
 
-class Flee : public Action {
+class Flee : public virtual Action {
 public:
 	Flee(bool isPlayer);
+	bool wasSuccessful();
 
 private:
+	bool mSuccess;
+
+};
 
 
+class Battle {
+public:
+	Battle(Pokemon* pPokemon, Pokemon* oPokemon);
+	bool attackOrder(Fight* playerAction, Fight* opponentAction);
+	bool checkSpeeds();
+	bool determineOrder(Action* playerAction, Action* opponentAction);
+	void performAction(Action* action);
+
+private:
+	Pokemon* mPlayerPokemon;
+	Pokemon* mOpponentPokemon;
 };
 
 
@@ -67,23 +85,23 @@ public:
 	BattleOverview(Trainer* player, Pokemon* wild);
 	BattleOverview(Trainer* player, Trainer* opponent);
 
+	void startBattle(Pokemon* pPokemon, Pokemon* oPokemon);
 	void battle();
-	bool battleStep(Action* action1, Action* action2);
+	void battleStep(Action* action1, Action* action2);
 	Action* selectAction(bool isPlayer);
-	bool attackOrder(Action* playerAction, Action* opponentAction);
-	bool checkSpeeds();
-	bool determineOrder(Action* playerAction, Action* opponentAction);
-	bool performAction(Action* action);
+	
+	
+	
+
+	Action* getLastAction();
 
 	bool isFinished();
 
 private:
 	vector<Trainer*> mTrainers;
 
-	Pokemon* mPlayerPokemon;
-	Pokemon* mOpponentPokemon;
+	Battle* mBattle;
 
-	//Battle mBattle;
 	vector<Action*> mActionHistory;
 	int mTurnNum;
 

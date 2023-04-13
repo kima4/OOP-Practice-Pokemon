@@ -7,6 +7,7 @@
 
 using namespace std;
 
+
 enum Category { PHYSICAL, SPECIAL, STATUS };
 
 extern map<Category, string> CategoryStr;

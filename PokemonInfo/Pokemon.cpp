@@ -72,7 +72,10 @@ void Pokemon::initStats() {
 void Pokemon::initMoves() {
 	string moves[4] = {"PLACEHOLDER", "PLACEHOLDER", "PLACEHOLDER", "PLACEHOLDER"};
 
+	setMoves(moves); // to prevent segfaults
+
 	int moveSlot = 0;
+	vector<string> toLearn;
 
 	for (int i = mLevel; i > 0; i--) {
 		vector<string> learnedMoves = mSpecies->getMovesAt(i);
@@ -80,21 +83,26 @@ void Pokemon::initMoves() {
 			continue;
 		}
 
-		random_shuffle(learnedMoves.begin(), learnedMoves.end());
-
-		while (learnedMoves.size() > (4 - moveSlot)) {
-			learnedMoves.erase(learnedMoves.end() - 1);
-		}
+		vector<string> toLearnAtLevel;
+		
 		for (int j = 0; j < learnedMoves.size(); j++) {
-			moves[moveSlot] = learnedMoves[j];
-			moveSlot++;
+			if (count(toLearn.begin(), toLearn.end(), learnedMoves[j]) == 0) {
+				toLearnAtLevel.push_back(learnedMoves[j]);
+			}
 		}
-		if (moveSlot > 3) {
+
+		random_shuffle(toLearnAtLevel.begin(), toLearnAtLevel.end());
+
+		while (toLearn.size() + toLearnAtLevel.size() > NUM_MOVES) {
+			toLearnAtLevel.erase(toLearnAtLevel.end() - 1);
+		}
+		toLearn.insert(toLearn.end(), toLearnAtLevel.begin(), toLearnAtLevel.end());
+
+		if (toLearn.size() >= 4) {
 			break;
 		}
 	}
-
-	setMoves(moves);
+	setMoves(toLearn);
 }
 
 /**
@@ -297,15 +305,32 @@ void Pokemon::resetStatChanges() {
 /**
  * Move getters and setters
  */
-Move* Pokemon::getMove(int moveSlot) {
+Move* Pokemon::getMove(MoveNum moveSlot) {
 	return mMoves[moveSlot];
+}
+
+string Pokemon::getMoveName(MoveNum moveSlot) {
+	return mMoves[moveSlot]->getMoveName();
 }
 
 Move** Pokemon::getMoves() {
 	return mMoves;
 }
 
-void Pokemon::setMove(string moveName, int moveSlot) {
+vector<string> Pokemon::getMoveNames() {
+	vector<string> moveNames;
+	print();
+	for (int i = MOVE_1; i != NUM_MOVES; i++) {
+		string moveName = mMoves[(MoveNum)i]->getMoveName();
+		cout << "!!!!!!!!!!!" << moveName << endl;
+		if (moveName != "PLACEHOLDER") {
+			moveNames.push_back(moveName);
+		}
+	}
+	return moveNames;
+}
+
+void Pokemon::setMove(string moveName, MoveNum moveSlot) {
 	try {
 		mMoves[moveSlot] = MoveList.at(moveName);
 	}
@@ -315,47 +340,62 @@ void Pokemon::setMove(string moveName, int moveSlot) {
 	}
 }
 
-void Pokemon::setMove(Move* move, int moveSlot) {
+void Pokemon::setMove(Move* move, MoveNum moveSlot) {
 	mMoves[moveSlot] = move;
 }
 
-void Pokemon::setMoves(string moveNames[4]) {
-	for (int i = 0; i < 4; i++) {
-		setMove(moveNames[i], i);
+void Pokemon::setMoves(string moveNames[NUM_MOVES]) {
+	for (int i = MOVE_1; i != NUM_MOVES; i++) {
+		setMove(moveNames[i], (MoveNum)i);
 	}
 }
 
-void Pokemon::setMoves(Move* moves[4]) {
-	for (int i = 0; i < 4; i++) {
-		setMove(moves[i], i);
+void Pokemon::setMoves(Move* moves[NUM_MOVES]) {
+	for (int i = MOVE_1; i != NUM_MOVES; i++) {
+		setMove(moves[i], (MoveNum)i);
 	}
 }
 
-void Pokemon::refillMove(int moveSlot) {
+void Pokemon::setMoves(vector<string> moves) {
+	for (int i = MOVE_1; i < moves.size(); i++) {
+		setMove(moves[i], (MoveNum)i);
+	}
+}
+
+void Pokemon::refillMove(MoveNum moveSlot) {
 	int maxPP = mMoves[moveSlot]->getBasePP();
 	setMovePP(maxPP, moveSlot);
 }
 
 void Pokemon::refillMoves() {
-	for (int i = 0; i < 4; i++) {
-		refillMove(i);
+	for (int i = MOVE_1; i != NUM_MOVES; i++) {
+		refillMove((MoveNum)i);
 	}
 }
 
-int Pokemon::getMovePP(int moveSlot) {
+int Pokemon::getMovePP(MoveNum moveSlot) {
 	return mMovePP[moveSlot];
 }
 
-void Pokemon::setMovePP(int pp, int moveSlot) {
+void Pokemon::setMovePP(int pp, MoveNum moveSlot) {
 	mMovePP[moveSlot] = pp;
 }
 
-void Pokemon::decMovePP(int moveSlot) {
+void Pokemon::decMovePP(MoveNum moveSlot) {
 	int pp = getMovePP(moveSlot) - 1;
 	setMovePP(pp, moveSlot);
 }
 
-void Pokemon::learnMove(string moveName, int moveSlot) {
+bool Pokemon::alreadyKnows(string moveName) {
+	vector<string> moveNames = getMoveNames();
+
+	if (find(moveNames.begin(), moveNames.end(), moveName) != moveNames.end()) {
+		return true;
+	}
+	return false;
+}
+
+void Pokemon::learnMove(string moveName, MoveNum moveSlot) {
 	setMove(moveName, moveSlot);
 	refillMove(moveSlot);
 }
@@ -395,10 +435,10 @@ void Pokemon::print() {
 	cout << "    Spd: " << mStats[SPD] << " +" << mStatChanges[SPD] << '\n';
 
 	cout << "--------- Moves ---------\n";
-	for (int i = 0; i < 4; i++) {
+	for (int i = MOVE_1; i != NUM_MOVES; i++) {
 		mMoves[i]->print();
 		if (mMoves[i]->getMoveName() != "PLACEHOLDER") {
-			cout << "  Current PP: " << getMovePP(i) << '\n';
+			cout << "  Current PP: " << getMovePP((MoveNum)i) << '\n';
 		}
 	}
 }

@@ -10,6 +10,8 @@
 
 using namespace std;
 
+enum MoveNum { MOVE_1, MOVE_2, MOVE_3, MOVE_4, NUM_MOVES };
+
 class Pokemon {
 public:
 
@@ -78,18 +80,22 @@ public:
 	void resetStatChanges();
 
 	// moves
-	Move* getMove(int moveSlot);
+	Move* getMove(MoveNum moveSlot);
+	string getMoveName(MoveNum moveSlot);
 	Move** getMoves();
-	void setMove(string moveName, int moveSlot);
-	void setMove(Move* move, int moveSlot);
-	void setMoves(string moveNames[4]);
-	void setMoves(Move* moves[4]);
-	void refillMove(int moveSlot);
+	vector<string> getMoveNames();
+	void setMove(string moveName, MoveNum moveSlot);
+	void setMove(Move* move, MoveNum moveSlot);
+	void setMoves(string moveNames[NUM_MOVES]);
+	void setMoves(Move* moves[NUM_MOVES]);
+	void setMoves(vector<string> moves);
+	void refillMove(MoveNum moveSlot);
 	void refillMoves();
-	int getMovePP(int moveSlot);
-	void setMovePP(int pp, int moveSlot);
-	void decMovePP(int moveSlot);
-	void learnMove(string moveName, int moveSlot);
+	int getMovePP(MoveNum moveSlot);
+	void setMovePP(int pp, MoveNum moveSlot);
+	void decMovePP(MoveNum moveSlot);
+	bool alreadyKnows(string moveName);
+	void learnMove(string moveName, MoveNum moveSlot);
 
 	void print();
 
@@ -111,8 +117,8 @@ private:
 	int mStatChanges[NUM_STAT_CHANGES];
 
 	// moves
-	Move* mMoves[4];
-	int mMovePP[4];
+	Move* mMoves[NUM_MOVES];
+	int mMovePP[NUM_MOVES];
 
 };
 
