@@ -11,7 +11,7 @@ Trainer::Trainer(string name) : mName(name) {
 
 Trainer::Trainer(string name, vector<Pokemon*> party) : mName(name), mParty(party) {
 	mNumPokemon = party.size();
-	mNumUsablePokemon = mNumPokemon;
+	//mNumUsablePokemon = mNumPokemon;
 }
 
 
@@ -28,7 +28,13 @@ int Trainer::getNumPokemon() {
 }
 
 int Trainer::getNumUsablePokemon() {
-	return mNumUsablePokemon;
+	int usable = 0;
+	for (int i = 0; i < mNumPokemon; i++) {
+		if (mParty[i]->getCurrentHP() > 0) {
+			usable++;
+		}
+	}
+	return usable;
 }
 
 Pokemon* Trainer::getLead() {

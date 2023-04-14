@@ -286,6 +286,9 @@ void Pokemon::takeDamage(int damage) { // TODO change so it returns the amount o
 		resultingHP = 0;
 	}
 	setCurrentHP(resultingHP);
+	if (getCurrentHP() < 1) {
+		cout << mNickname << " fainted!" << endl;
+	}
 }
 
 void Pokemon::restoreHP(int healing) {

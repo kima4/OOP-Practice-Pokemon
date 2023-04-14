@@ -26,7 +26,7 @@ private:
 	string mName;
 	vector<Pokemon*> mParty;
 	int mNumPokemon;
-	int mNumUsablePokemon;
+	//int mNumUsablePokemon;
 };
 
 

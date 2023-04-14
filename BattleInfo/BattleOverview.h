@@ -11,7 +11,7 @@ enum ActionType { FIGHT, BAG, SWITCH, FLEE, MISTAKE };
 
 class Action;
 class Fight;
-class Bag;
+class BattleBag;
 class Switch;
 class Flee;
 
@@ -25,16 +25,18 @@ public:
 
 	//void startBattle(Pokemon* pPokemon, Pokemon* oPokemon);
 	void battle();
-	void battleStep(Action* action1, Action* action2);
-	Action* selectAction(bool isPlayer);
+	void performTurn(Action* action1, Action* action2);
+
 	int selectOption(int min, int max);
 	Action* createAction(bool isPlayer, int choice);
+	Action* selectAction(bool isPlayer);
 	Action* getLastAction();
 
 	bool attackOrder(Fight* playerAction, Fight* opponentAction);
 	bool checkSpeeds();
 	bool determineOrder(Action* playerAction, Action* opponentAction);
 	void performAction(Action* action);
+	bool emergencySwitch(bool isPlayer);
 	
 	Trainer* getTrainer(bool isPlayer);
 	Pokemon* getPokemon(bool isPlayer);
@@ -89,12 +91,25 @@ public:
 	void setParameter(int val);
 	int getParameter();
 
-	int selectOption(int min, int max, int back);
+	int getTurnNum();
+	int getActionNum();
+	void setActionNum(int actionNum);
+
+	int selectOption(int min, int max, bool back);
 
 	virtual void print();
 
 private:
+	/*
+	 * Fight - damage done
+	 * 
+	 * Switch - 0 = normal switch, 1 = emergency switch
+	 * Flee - -1 = failure, 1 = success
+	 */
 	int mParameter;
+
+	int mTurnNum;
+	int mActionNum;
 
 	ActionType mActionType;
 	bool mIsPlayer;
@@ -133,14 +148,14 @@ public:
 	void print();
 
 private:
-	//int mPriority;
+	int mMoveSlot;
 	Move* mMove;
 	Pokemon* mAttacker;
 	Pokemon* mDefender;
 
 };
 
-class Bag : public virtual Action {
+class BattleBag : public virtual Action {
 public:
 	//Bag();
 
