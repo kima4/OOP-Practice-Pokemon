@@ -32,6 +32,7 @@ public:
 	Action* selectAction(bool isPlayer);
 	Action* getLastAction();
 	void deleteAction(Action*);
+	void deleteActionChain();
 
 	bool attackOrder(Fight* playerAction, Fight* opponentAction);
 	bool checkSpeeds();

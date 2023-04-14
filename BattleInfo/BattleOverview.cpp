@@ -74,8 +74,9 @@ void BattleOverview::battle() {
 		else {
 			performTurn(opponentAction, playerAction);
 		}
-	} // TODO create method to delete all actions
+	}
 	printActionChain();
+	deleteActionChain();
 }
 
 void BattleOverview::performTurn(Action* action1, Action* action2) {
@@ -143,7 +144,6 @@ Action* BattleOverview::createAction(bool isPlayer, int choice) {
 	return new Action(*this, isPlayer);
 }
 
-
 Action* BattleOverview::selectAction(bool isPlayer) {
 	cout << "1. Fight" << endl;
 	cout << "2. Bag" << endl;
@@ -188,6 +188,12 @@ void BattleOverview::deleteAction(Action* action) {
 	}
 	default:
 		delete action;
+	}
+}
+
+void BattleOverview::deleteActionChain() {
+	for (int i = 0; i < mActionHistory.size(); i++) {
+		deleteAction(mActionHistory[i]);
 	}
 }
 
@@ -782,7 +788,9 @@ bool Switch::selectPokemon() {
 }
 
 void Switch::switchPokemon() {
-	cout << "Withdrew " << mSwitchedOut->getNickname() << "!" << endl;
+	if (getParameter() == 0) {
+		cout << "Withdrew " << mSwitchedOut->getNickname() << "!" << endl;
+	}
 	cout << "Send out " << mSwitchedIn->getNickname() << "!" << endl;
 	getBattleRef().setPokemon(isPlayerAction(), mSwitchedIn);
 }
