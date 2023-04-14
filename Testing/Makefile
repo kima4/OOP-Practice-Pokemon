@@ -27,5 +27,8 @@ Trainer.o: ../TrainerInfo/Trainer.cpp ../TrainerInfo/Trainer.h
 BattleOverview.o: ../BattleInfo/BattleOverview.cpp ../BattleInfo/BattleOverview.h
 	g++ -c ../BattleInfo/BattleOverview.cpp
 
+Item.o: ../ItemInfo/Item.cpp ../ItemInfo/ItemDatabase.cpp
+	g++ -c ../ItemInfo/Item.cpp
+
 clean:
 	rm -f *.o tests
