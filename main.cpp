@@ -3,7 +3,7 @@
 
 void TestBattle() {
 	vector<Pokemon*> party1;
-	Pokemon* igglybuff = new Pokemon("Igglybuff", 83);
+	Pokemon* igglybuff = new Pokemon("Igglybuff", 3);
 	Pokemon* mewtwo = new Pokemon("Mewtwo", 4);
 	Pokemon* jolteon = new Pokemon("Jolteon", 32);
 	party1.push_back(igglybuff);

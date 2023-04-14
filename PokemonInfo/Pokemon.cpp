@@ -431,9 +431,15 @@ void Pokemon::learnMove(string moveName, MoveNum moveSlot) {
 /**
  * Print information about the Pokemon object to console
  */
-void Pokemon::print() {
+
+void Pokemon::printLight() {
 	cout << mNickname << '\n';
 	cout << "   Level " << mLevel << '\n';
+}
+
+
+void Pokemon::print() {
+	printLight();
 	cout << "   ";
 	mSpecies->print();
 	cout << "   HP: " << getCurrentHP() << " / " << getStat(HP) << endl;

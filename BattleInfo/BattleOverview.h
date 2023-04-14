@@ -31,6 +31,7 @@ public:
 	Action* createAction(bool isPlayer, int choice);
 	Action* selectAction(bool isPlayer);
 	Action* getLastAction();
+	void deleteAction(Action*);
 
 	bool attackOrder(Fight* playerAction, Fight* opponentAction);
 	bool checkSpeeds();
@@ -58,6 +59,8 @@ public:
 	void incEscapeAttempts();
 
 	bool isFinished();
+
+	void printActionChain();
 
 private:
 	vector<Trainer*> mTrainers;
@@ -97,6 +100,7 @@ public:
 
 	int selectOption(int min, int max, bool back);
 
+	virtual void printPreview();
 	virtual void print();
 
 private:
@@ -145,6 +149,7 @@ public:
 
 	void execute();
 
+	void printPreview();
 	void print();
 
 private:

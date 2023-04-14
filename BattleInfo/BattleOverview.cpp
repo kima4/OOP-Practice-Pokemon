@@ -63,15 +63,19 @@ void BattleOverview::battle() {
 		Action* opponentAction = selectAction(false);
 		while (opponentAction->getActionType() == MISTAKE) {
 			delete opponentAction;
+
 			opponentAction = selectAction(false);
 		}
+
 		if (determineOrder(playerAction, opponentAction)) {
+			
 			performTurn(playerAction, opponentAction);
 		}
 		else {
 			performTurn(opponentAction, playerAction);
 		}
 	} // TODO create method to delete all actions
+	printActionChain();
 }
 
 void BattleOverview::performTurn(Action* action1, Action* action2) {
@@ -81,7 +85,9 @@ void BattleOverview::performTurn(Action* action1, Action* action2) {
 		return;
 	}
 	if (emergencySwitch(true) || emergencySwitch(false)) {
-		delete action2;
+		
+		//action2->printPreview();
+		deleteAction(action2);
 		return;
 	}
 	performAction(action2);
@@ -107,7 +113,7 @@ Action* BattleOverview::createAction(bool isPlayer, int choice) {
 	{
 		Fight* action = new Fight(*this, isPlayer);
 		if (action->selectMove()) {
-			action->print();
+			action->printPreview();
 			return action;
 		}
 		delete action;
@@ -151,6 +157,38 @@ Action* BattleOverview::selectAction(bool isPlayer) {
 
 Action* BattleOverview::getLastAction() {
 	return mActionHistory.back();
+}
+
+void BattleOverview::deleteAction(Action* action) {
+	ActionType actType = action->getActionType();
+	switch (actType) {
+	case FIGHT:
+	{
+		Fight* f = dynamic_cast<Fight*>(action);
+		delete f;
+		break;
+	}
+	case BAG:
+	{
+		//BattleBag* b = dynamic_cast<BattleBag*>(action);
+		//delete b;
+		break;
+	}
+	case SWITCH:
+	{
+		Switch* s = dynamic_cast<Switch*>(action);
+		delete s;
+		break;
+	}
+	case FLEE:
+	{
+		Flee* f = dynamic_cast<Flee*>(action);
+		delete f;
+		break;
+	}
+	default:
+		delete action;
+	}
 }
 
 // true if player goes first
@@ -338,7 +376,11 @@ bool BattleOverview::isFinished() {
 	return false;
 }
 
-
+void BattleOverview::printActionChain() {
+	for (int i = 1; i < mActionHistory.size(); i++) {
+		mActionHistory[i]->print();
+	}
+}
 
 /* ----------------------------------------------------------------
  *
@@ -410,10 +452,16 @@ int Action::selectOption(int min, int max, bool back) {
 	return choice;
 }
 
-void Action::print() {
-	cout << "-------------------------" << endl;
+void Action::printPreview() {
+	cout << "-------------------" << endl;
 	cout << "Mistakes were made." << endl;
-	cout << "-------------------------" << endl;
+	cout << "-------------------" << endl;
+}
+
+void Action::print() {
+	cout << "===================" << endl;
+	cout << "Mistakes were made." << endl;
+	cout << "===================" << endl;
 }
 
 /* ----------------------------------------------------------------
@@ -597,8 +645,10 @@ void Fight::doDamage(int damage) {
 
 void Fight::makeAttack() {
 	cout << mAttacker->getNickname() << " used " << mMove->getMoveName() << "!" << endl;
-
+	
 	mAttacker->decMovePP((MoveNum)mMoveSlot);
+
+	setParameter(0);
 
 	double hitChance = calcAccuracy(mMove->getBaseAccuracy());
 	int hitVal = rand() % 100;
@@ -641,14 +691,28 @@ void Fight::execute() {
 	makeAttack();
 }
 
+void Fight::printPreview() {
+	cout << "-------------------------" << endl;
+	cout << "Fight Action" << endl;
+	cout << "Attacking Pokemon: " << endl;
+	cout << " ";
+	mAttacker->printLight();
+	//cout << "  " << mAttacker->getNickname() << " (" << mAttacker->getSpecies()->getSpecies() << ")" << endl;
+	cout << "Move Used: " << mMove->getMoveName() << endl;
+	cout << "-------------------------" << endl;
+}
+
 void Fight::print() {
 	cout << "-------------------------" << endl;
 	cout << "Fight Action" << endl;
 	cout << "Attacking Pokemon: " << endl;
 	cout << " ";
-	mAttacker->print();
-	//cout << "  " << mAttacker->getNickname() << " (" << mAttacker->getSpecies()->getSpecies() << ")" << endl;
+	mAttacker->printLight();
+	cout << "Defending Pokemon: " << endl;
+	cout << " ";
+	mDefender->printLight();
 	cout << "Move Used: " << mMove->getMoveName() << endl;
+	cout << "Damage Done: " << getParameter() << endl;
 	cout << "-------------------------" << endl;
 }
 
@@ -687,13 +751,11 @@ bool Switch::selectPokemon() {
 		cout << i + 1 << ": ";
 		party[i]->print();
 	}
-	
 	bool back = false;
 	if (getParameter() == 0) {
 		cout << "Press 0 to return to previous menu." << endl;
 		back = true;
 	}
-
 	int choice = selectOption(1, party.size(), back);
 	if (choice == 0) {
 		return false;
@@ -716,7 +778,6 @@ bool Switch::selectPokemon() {
 
 	getBattleRef().resetStatChanges(isPlayerAction());
 	mSwitchedIn = party[choice - 1];
-
 	return true;
 }
 
@@ -735,10 +796,10 @@ void Switch::print() {
 	cout << "Switch Action" << endl;
 	cout << "Switching Out Pokemon: " << endl;
 	cout << " ";
-	mSwitchedOut->print();
+	mSwitchedOut->printLight();
 	cout << "Switching In Pokemon: " << endl;
 	cout << " ";
-	mSwitchedIn->print();
+	mSwitchedIn->printLight();
 	cout << "-------------------------" << endl;
 }
 

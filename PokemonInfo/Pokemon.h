@@ -99,6 +99,7 @@ public:
 	bool alreadyKnows(string moveName);
 	void learnMove(string moveName, MoveNum moveSlot);
 
+	void printLight();
 	void print();
 	void printVerbose();
 
