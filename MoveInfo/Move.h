@@ -18,17 +18,17 @@ string getCategoryString(Category category);
 class Move {
 public:
 	Move(string name);
+	void initMoveDetails(string name);
 
 	string getMoveName();
 	int getBasePower();
 	int getBaseAccuracy();
 	int getBasePP();
 	int getPriority();
+	int getCritRate();
 
 	Type getType();
 	Category getCategory();
-
-	void test(int val);
 
 	void print();
 
@@ -39,6 +39,7 @@ private:
 	int mBaseAccuracy;
 	int mBasePP;
 	int mPriority;
+	int mCritRate;
 
 	Type mType;
 	Category mCategory;

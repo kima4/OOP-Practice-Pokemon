@@ -20,26 +20,27 @@ using namespace std;
  * ----------------------------------------------------------------*/
 
 
-BattleOverview::BattleOverview(Trainer* player, Pokemon* wild) {
+BattleOverview::BattleOverview() {
+	mTurnNum = 0;
+	resetStatChanges(true);
+	resetStatChanges(false);
+	mEscapeAttempts = 0;
+}
+
+BattleOverview::BattleOverview(Trainer* player, Pokemon* wild) : BattleOverview() {
 	mTrainers.push_back(player);
 	mPlayerPokemon = player->getLead();
 	mOpponentPokemon = wild;
-	mTurnNum = 0;
 	mIsWild = true;
-	resetStatChanges(true);
-	resetStatChanges(false);
+	
 }
 
-
-BattleOverview::BattleOverview(Trainer* player, Trainer* opponent) {
+BattleOverview::BattleOverview(Trainer* player, Trainer* opponent) : BattleOverview() {
 	mTrainers.push_back(player);
 	mTrainers.push_back(opponent);
 	mPlayerPokemon = player->getLead();
 	mOpponentPokemon = opponent->getLead();
-	mTurnNum = 0;
 	mIsWild = false;
-	resetStatChanges(true);
-	resetStatChanges(false);
 }
 
 
@@ -115,7 +116,11 @@ Action* BattleOverview::createAction(bool isPlayer, int choice) {
 	case 3:
 		return new Switch(*this, isPlayer);
 	case 4:
-		return new Flee(*this, isPlayer);
+		if (mIsWild) {
+			return new Flee(*this, isPlayer);
+		}
+		cout << "There's no running from a trainer battle!" << endl;
+		break;
 	}
 	//cout << "Something went wrong in BattleOverview::selectAction()." << endl;
 	return new Action(*this, isPlayer);
@@ -240,6 +245,15 @@ int BattleOverview::getTurnNum() {
 	return mTurnNum;
 }
 
+int BattleOverview::getEscapeAttempts() {
+	return mEscapeAttempts;
+}
+
+void BattleOverview::incEscapeAttempts() {
+	mEscapeAttempts++;
+}
+
+
 // true if battle is over
 bool BattleOverview::isFinished() {
 	// check if either side is out of pokemon
@@ -258,8 +272,7 @@ bool BattleOverview::isFinished() {
 	if (mActionHistory.size() > 0) {
 		Action* lastAction = getLastAction();
 		if (lastAction->getActionType() == FLEE) {
-			Flee* fleeAction = dynamic_cast<Flee*>(getLastAction());
-			if (fleeAction->wasSuccessful()) {
+			if (lastAction->getParameter() > 0) {
 				return true;
 			}
 		}
@@ -304,6 +317,14 @@ BattleOverview& Action::getBattleRef() {
 	return mBattle;
 }
 
+void Action::setParameter(int val) {
+	mParameter = val;
+}
+
+int Action::getParameter() {
+	return mParameter;
+}
+
 void Action::print() {
 	cout << "-------------------------" << endl;
 	cout << "Mistakes were made." << endl;
@@ -346,10 +367,8 @@ Fight::Fight(BattleOverview& battle, bool isPlayer, Move* move) : Action(battle,
 }
 
 int Fight::getPriority() {
-	return 0; // TODO implement priority
-	//return mMove->getPriority(); 
+	return mMove->getPriority(); 
 }
-
 
 // false if no move selected
 bool Fight::selectMove() {
@@ -485,6 +504,11 @@ double Fight::calcDamage(double crit) {
 }
 
 void Fight::doDamage(int damage) {
+	if (damage > mDefender->getCurrentHP()) {
+		damage = mDefender->getCurrentHP();
+	}
+
+	setParameter(damage); // storing amount of damage done
 	mDefender->takeDamage(damage);
 }
 
@@ -496,7 +520,7 @@ void Fight::makeAttack() {
 		return;
 	}
 	
-	if (mMove->getType() != STATUS) {
+	if (mMove->getCategory() != STATUS) {
 		double damageMultiplier = calcEffectiveness(mMove->getType());
 		if (damageMultiplier == 0) {
 			cout << "Attack does not affect opponent!" << endl;
@@ -504,7 +528,7 @@ void Fight::makeAttack() {
 		}
 		//cout << "DAMAGE MULTIPLIER: " << damageMultiplier << endl;
 
-		double critMultiplier = calcCrit(0); // TODO implement moves with special effects
+		double critMultiplier = calcCrit(mMove->getCritRate());
 
 		int damage = round(calcDamage(critMultiplier) * damageMultiplier);
 
@@ -565,26 +589,41 @@ Switch::Switch(BattleOverview& battle, bool isPlayer) : Action(battle, isPlayer)
  *
  *
  * ----------------------------------------------------------------*/
-
+ 
 Flee::Flee(BattleOverview& battle, bool isPlayer) : Action(battle, isPlayer) {
 	setActionType(FLEE);
 }
 
-bool Flee::wasSuccessful() {
-	return mSuccess;
+//bool Flee::wasSuccessful() {
+//	return mSuccess;
+//}
+
+int Flee::attemptEscape() {
+	int playerSpd = getBattleRef().getPlayerPokemon()->getStat(SPD);
+	int wildSpd = getBattleRef().getOpponentPokemon()->getStat(SPD);
+
+	if (playerSpd > wildSpd) {
+		cout << "Escaped from battle!" << endl;
+		return 1;
+	}
+
+	int escapeOdds = (((playerSpd * 128) / wildSpd) + 30 * getBattleRef().getEscapeAttempts()) % 256;
+	int escapeVal = rand() % 256;
+
+	if (escapeOdds > escapeVal) {
+		cout << "Escaped from battle!" << endl;
+		return 1;
+	}
+
+	getBattleRef().incEscapeAttempts();
+	cout << "Couldn't get away!" << endl;
+	return -1;
 }
 
+void Flee::execute() {
+	setParameter(attemptEscape());
+}
 
-
-/* ----------------------------------------------------------------
- *
- *
- *
- *                            Battle
- *
- *
- *
- * ----------------------------------------------------------------*/
 
 
 

@@ -19,6 +19,7 @@ class Flee;
 
 class BattleOverview {
 public:
+	BattleOverview();
 	BattleOverview(Trainer* player, Pokemon* wild);
 	BattleOverview(Trainer* player, Trainer* opponent);
 
@@ -49,6 +50,9 @@ public:
 	
 	int getTurnNum();
 	
+	int getEscapeAttempts();
+	void incEscapeAttempts();
+
 	bool isFinished();
 
 private:
@@ -67,6 +71,8 @@ private:
 	vector<Action*> mActionHistory;
 	int mTurnNum;
 
+	int mEscapeAttempts;
+
 };
 
 class Action {
@@ -77,11 +83,15 @@ public:
 	virtual void execute();
 	bool isPlayerAction();
 	BattleOverview& getBattleRef();
+
+	void setParameter(int val);
+	int getParameter();
+
 	virtual void print();
 
-
-
 private:
+	int mParameter;
+
 	ActionType mActionType;
 	bool mIsPlayer;
 	BattleOverview& mBattle;
@@ -147,10 +157,13 @@ private:
 class Flee : public virtual Action {
 public:
 	Flee(BattleOverview& battle, bool isPlayer);
-	bool wasSuccessful();
+	//bool wasSuccessful();
+
+	int attemptEscape();
+	void execute();
 
 private:
-	bool mSuccess;
+	//bool mSuccess;
 
 };
 

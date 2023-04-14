@@ -265,7 +265,42 @@ map<string, tuple<int, int, int, Type, Category>> MoveData = {
 	{ "Beat Up", {0, 100, 10, DARK, PHYSICAL} }
 };
 
+map<string, int> MovePriority = {
+	{ "Detect", 2 },
+	{ "Protect", 2 }, 
+	{ "Endure", 2}, 
+	{ "Extreme Speed", 1 },
+	{ "Quick Attack", 1 }, 
+	{ "Mach Punch", 1 }, 
+	{ "Counter", -1 }, 
+	{ "Mirror Coat", -1 }, 
+	{ "Roar", -1 }, 
+	{ "Whirlwind", -1 },
+	{ "Vital Throw", -1 }
+};
 
+map<string, int> MoveCrit = {
+	{ "Aeroblast", 1 },
+	{ "Crabhammer", 1 },
+	{ "Cross Chop", 1 },
+	{ "Karate Chop", 1 },
+	{ "Razor Leaf", 1 },
+	{ "Razor Wind", 1 },
+	{ "Sky Attack", 1 },
+	{ "Slash", 1 },
+	{ "Flail", -1 },
+	{ "Future Sight", -1 },
+	{ "Reversal", -1 },
+	{ "Bide", -1 },
+	{ "Counter", -1 },
+	{ "Dragon Rage", -1 },
+	{ "Mirror Coat", -1 },
+	{ "Night Shade", -1 },
+	{ "Psywave", -1 },
+	{ "Seismic Toss", -1 },
+	{ "Sonic Boom", -1 },
+	{ "Super Fang", -1 }
+};
 
 
 #endif

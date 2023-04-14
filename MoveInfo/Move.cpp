@@ -26,6 +26,23 @@ Move::Move(string name) {
 	mCategory = get<4>(move);
 }
 
+void Move::initMoveDetails(string name) {
+	try {
+		mPriority = MovePriority.at(name);
+	}
+	catch (const out_of_range& e) {
+		mPriority = 0;
+	}
+
+	try {
+		mCritRate = MoveCrit.at(name);
+	}
+	catch (const out_of_range& e) {
+		mCritRate = 0;
+	}
+
+}
+
 string Move::getMoveName() {
 	return mName;
 }
@@ -46,16 +63,16 @@ int Move::getPriority() {
 	return mPriority;
 }
 
+int Move::getCritRate() {
+	return mCritRate;
+}
+
 Type Move::getType() {
 	return mType;
 }
 
 Category Move::getCategory() {
 	return mCategory;
-}
-
-void Move::test(int val){
-	mBasePower = val;
 }
 
 void Move::print() {
