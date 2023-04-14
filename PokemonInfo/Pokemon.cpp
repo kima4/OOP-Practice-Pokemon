@@ -429,11 +429,19 @@ void Pokemon::learnMove(string moveName, MoveNum moveSlot) {
  * Print information about the Pokemon object to console
  */
 void Pokemon::print() {
+	cout << mNickname << '\n';
+	cout << "   Level " << mLevel << '\n';
+	cout << "   ";
+	mSpecies->print();
+	cout << "   HP: " << getCurrentHP() << " / " << getStat(HP) << endl;
+}
 
+
+void Pokemon::printVerbose() {
 	cout << mNickname << '\n';
 	cout << "Level " << mLevel << '\n';
 
-	mSpecies->print();
+	mSpecies->printVerbose();
 
 	cout << "--------- IVs ---------\n";
 	cout << "     HP: " << mIVs[HP] << '\n';

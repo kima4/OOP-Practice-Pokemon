@@ -78,9 +78,15 @@ Category Move::getCategory() {
 void Move::print() {
 	if (getMoveName() != "PLACEHOLDER") {
 		cout << getMoveName() << '\n';
-		cout << getTypeString(getType()) << "  " << getCategoryString(getCategory()) << '\n';
-		cout << "  Base Power: " << getBasePower() << '\n';
-		cout << "  Base Accuracy: " << getBaseAccuracy() << '\n';
-		cout << "  Base PP: " << getBasePP() << '\n';
+		cout << "   " << getTypeString(getType()) << "  " << getCategoryString(getCategory()) << endl;
+	}
+}
+
+void Move::printVerbose() {
+	if (getMoveName() != "PLACEHOLDER") {
+		print();
+		cout << "   Base Power: " << getBasePower() << '\n';
+		cout << "   Base Accuracy: " << getBaseAccuracy() << '\n';
+		cout << "   Base PP: " << getBasePP() << endl;
 	}
 }

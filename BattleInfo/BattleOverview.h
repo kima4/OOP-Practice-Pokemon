@@ -37,8 +37,10 @@ public:
 	void performAction(Action* action);
 	
 	Trainer* getTrainer(bool isPlayer);
+	Pokemon* getPokemon(bool isPlayer);
 	Pokemon* getPlayerPokemon();
 	Pokemon* getOpponentPokemon();
+	void setPokemon(bool isPlayer, Pokemon* pokemon);
 
 	int getStatChange(bool isPlayer, Stat stat);
 	void setStatChange(bool isPlayer, Stat stat, int statChange);
@@ -86,6 +88,8 @@ public:
 
 	void setParameter(int val);
 	int getParameter();
+
+	int selectOption(int min, int max, int back);
 
 	virtual void print();
 
@@ -149,8 +153,16 @@ class Switch : public virtual Action {
 public:
 	Switch(BattleOverview& battle, bool isPlayer);
 
-private:
+	bool selectPokemon();
+	void switchPokemon();
+	void execute();
 
+	void print();
+
+private:
+	Trainer* mTrainer;
+	Pokemon* mSwitchedOut;
+	Pokemon* mSwitchedIn;
 
 };
 
@@ -161,6 +173,8 @@ public:
 
 	int attemptEscape();
 	void execute();
+
+	void print();
 
 private:
 	//bool mSuccess;

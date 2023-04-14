@@ -100,6 +100,7 @@ public:
 	void learnMove(string moveName, MoveNum moveSlot);
 
 	void print();
+	void printVerbose();
 
 private:
 	PokemonSpecies* mSpecies;

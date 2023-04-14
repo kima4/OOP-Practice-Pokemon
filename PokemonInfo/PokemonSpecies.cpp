@@ -78,17 +78,22 @@ void PokemonSpecies::initMoves(string species) {
  * Print information about the PokemonSpecies object to console
  */
 void PokemonSpecies::print() {
-	cout << mSpecies << '\n';
+	cout << mSpecies << endl;
 
-	cout << getTypeString(mTypes[0]) << "  " << getTypeString(mTypes[1]) << '\n';
+	cout << "   " << getTypeString(mTypes[0]) << "  " << getTypeString(mTypes[1]) << endl;
+}
 
-	cout << "--------- Base Stats ---------\n";
-	cout << "     HP: " << mBaseStats[HP] << '\n';
-	cout << "    Atk: " << mBaseStats[ATK] << '\n';
-	cout << "    Def: " << mBaseStats[DEF] << '\n';
-	cout << "  SpAtk: " << mBaseStats[SPATK] << '\n';
-	cout << "  SpDef: " << mBaseStats[SPDEF] << '\n';
-	cout << "    Spd: " << mBaseStats[SPD] << '\n';
+
+void PokemonSpecies::printVerbose() {
+	print();
+
+	cout << "   --------- Base Stats ---------" << endl;
+	cout << "        HP: " << mBaseStats[HP] << endl;
+	cout << "       Atk: " << mBaseStats[ATK] << endl;
+	cout << "       Def: " << mBaseStats[DEF] << endl;
+	cout << "     SpAtk: " << mBaseStats[SPATK] << endl;
+	cout << "     SpDef: " << mBaseStats[SPDEF] << endl;
+	cout << "       Spd: " << mBaseStats[SPD] << endl;
 
 }
 

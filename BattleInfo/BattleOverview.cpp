@@ -43,16 +43,16 @@ BattleOverview::BattleOverview(Trainer* player, Trainer* opponent) : BattleOverv
 	mIsWild = false;
 }
 
-
+// battle loop
 void BattleOverview::battle() {
 	while (!isFinished()) {
-		cout << "Player Action:" << endl;
+		cout << "\nPlayer Action:" << endl;
 		Action* playerAction = selectAction(true);
 		while (playerAction->getActionType() == MISTAKE) {
 			delete playerAction;
 			playerAction = selectAction(true);
 		}
-		cout << "Opponent Action:" << endl;
+		cout << "\nOpponent Action:" << endl;
 		Action* opponentAction = selectAction(false);
 		while (opponentAction->getActionType() == MISTAKE) {
 			delete opponentAction;
@@ -91,6 +91,7 @@ Action* BattleOverview::selectAction(bool isPlayer) {
 
 int BattleOverview::selectOption(int min, int max) {
 	int choice;
+	cout << "Select an option: ";
 	cin >> choice;
 	while (choice < min || choice > max) {
 		cout << "Invalid choice. Choose again: " << endl;
@@ -109,12 +110,21 @@ Action* BattleOverview::createAction(bool isPlayer, int choice) {
 			action->print();
 			return action;
 		}
+		delete action;
 		break;
 	}
 	case 2:
 		//return new Bag();
 	case 3:
-		return new Switch(*this, isPlayer);
+	{
+		Switch* action = new Switch(*this, isPlayer);
+		if (action->selectPokemon()) {
+			action->print();
+			return action;
+		}
+		delete action;
+		break;
+	}
 	case 4:
 		if (mIsWild) {
 			return new Flee(*this, isPlayer);
@@ -194,12 +204,28 @@ Trainer* BattleOverview::getTrainer(bool isPlayer) {
 	return mTrainers[1];
 }
 
+Pokemon* BattleOverview::getPokemon(bool isPlayer) {
+	if (isPlayer) {
+		return getPlayerPokemon();
+	}
+	return getOpponentPokemon();
+}
+
 Pokemon* BattleOverview::getPlayerPokemon() {
 	return mPlayerPokemon;
 }
 
 Pokemon* BattleOverview::getOpponentPokemon() {
 	return mOpponentPokemon;
+}
+
+void BattleOverview::setPokemon(bool isPlayer, Pokemon* pokemon) {
+	if (isPlayer) {
+		mPlayerPokemon = pokemon;
+	}
+	else {
+		mOpponentPokemon = pokemon;
+	}
 }
 
 int BattleOverview::getStatChange(bool isPlayer, Stat stat) {
@@ -325,6 +351,20 @@ int Action::getParameter() {
 	return mParameter;
 }
 
+int Action::selectOption(int min, int max, int back) {
+	int choice;
+	cout << "Select an option: ";
+	cin >> choice;
+	while (choice < min || choice > max) {
+		if (choice == back) {
+			return back;
+		}
+		cout << "Invalid choice. Choose again: ";
+		cin >> choice;
+	}
+	return choice;
+}
+
 void Action::print() {
 	cout << "-------------------------" << endl;
 	cout << "Mistakes were made." << endl;
@@ -378,18 +418,21 @@ bool Fight::selectMove() {
 	for (int i = 0; i < moves.size(); i++) {
 		cout << i + 1 << ":" << endl;
 		moves[i]->print();
-		cout << "  Current PP: " << pps[i] << endl;
+		cout << "   Current PP: " << pps[i] << endl;
 	}
 	cout << "Press 0 to return to previous menu." << endl;
 
-	int choice;
-	cin >> choice;
-	while (choice < 1 || choice > moves.size() || pps[choice - 1] < 1) {
+	int choice = selectOption(1, moves.size(), 0);
+	if (choice == 0) {
+		return false;
+	}
+	while (pps[choice - 1] < 1) {
+		cout << "Move is out of PP!" << endl;
+		cout << "Choose again: " << endl;
+		choice = selectOption(1, moves.size(), 0);
 		if (choice == 0) {
 			return false;
 		}
-		cout << "Invalid choice. Choose again: " << endl;
-		cin >> choice;
 	}
 
 	mMove = moves[choice - 1];
@@ -513,22 +556,34 @@ void Fight::doDamage(int damage) {
 }
 
 void Fight::makeAttack() {
+	cout << mAttacker->getNickname() << " used " << mMove->getMoveName() << "!" << endl;
+
 	double hitChance = calcAccuracy(mMove->getBaseAccuracy());
 	int hitVal = rand() % 100;
 	if (hitChance < hitVal) {
-		cout << "Attack missed!" << endl;
+		cout << "But it missed!" << endl;
 		return;
 	}
 	
 	if (mMove->getCategory() != STATUS) {
 		double damageMultiplier = calcEffectiveness(mMove->getType());
 		if (damageMultiplier == 0) {
-			cout << "Attack does not affect opponent!" << endl;
+			cout << "It had no effect..." << endl;
 			return;
+		}
+		else if (damageMultiplier > 1) {
+			cout << "It's super effective!" << endl;
+		}
+		else if (damageMultiplier < 1) {
+			cout << "It's not very effective..." << endl;
 		}
 		//cout << "DAMAGE MULTIPLIER: " << damageMultiplier << endl;
 
 		double critMultiplier = calcCrit(mMove->getCritRate());
+
+		if (critMultiplier > 1) {
+			cout << "A critical hit!" << endl;
+		}
 
 		int damage = round(calcDamage(critMultiplier) * damageMultiplier);
 
@@ -546,11 +601,15 @@ void Fight::execute() {
 void Fight::print() {
 	cout << "-------------------------" << endl;
 	cout << "Fight Action" << endl;
-	cout << "  Attacking Pokemon: " << endl;
+	cout << "Attacking Pokemon: " << endl;
+	cout << " ";
 	mAttacker->print();
-	cout << "  Defending Pokemon: " << endl;
+	//cout << "  " << mAttacker->getNickname() << " (" << mAttacker->getSpecies()->getSpecies() << ")" << endl;
+	cout << "Defending Pokemon: " << endl;
+	cout << " ";
 	mDefender->print();
-	cout << "  Move Used: " << mMove->getMoveName() << endl;
+	//cout << "  " << mDefender->getNickname() << " (" << mDefender->getSpecies()->getSpecies() << ")" << endl;
+	cout << "Move Used: " << mMove->getMoveName() << endl;
 	cout << "-------------------------" << endl;
 }
 
@@ -577,8 +636,59 @@ void Fight::print() {
 
 Switch::Switch(BattleOverview& battle, bool isPlayer) : Action(battle, isPlayer) {
 	setActionType(SWITCH);
+	mTrainer = getBattleRef().getTrainer(isPlayer);
+	mSwitchedOut = getBattleRef().getPokemon(isPlayer);
 }
 
+// false if no Pokemon selected
+bool Switch::selectPokemon() {
+	vector<Pokemon*> party = mTrainer->getParty();
+	for (int i = 0; i < party.size(); i++) {
+		cout << i + 1 << ": ";
+		party[i]->print();
+	}
+	cout << "Press 0 to return to previous menu." << endl;
+
+	int choice = selectOption(1, party.size(), 0);
+	if (choice == 0) {
+		return false;
+	}
+	while (party[choice - 1]->getCurrentHP() < 1) {
+		cout << "There is no energy to fight!" << endl;
+		cout << "Choose again : " << endl;
+		choice = selectOption(1, party.size(), 0);
+		if (choice == 0) {
+			return false;
+		}
+	}
+
+	getBattleRef().resetStatChanges(isPlayerAction());
+	mSwitchedIn = party[choice - 1];
+
+	return true;
+}
+
+void Switch::switchPokemon() {
+	cout << "Withdrew " << mSwitchedOut->getNickname() << "!" << endl;
+	cout << "Send out " << mSwitchedIn->getNickname() << "!" << endl;
+	getBattleRef().setPokemon(isPlayerAction(), mSwitchedIn);
+}
+
+void Switch::execute() {
+	switchPokemon();
+}
+
+void Switch::print() {
+	cout << "-------------------------" << endl;
+	cout << "Switch Action" << endl;
+	cout << "Switching Out Pokemon: " << endl;
+	cout << " ";
+	mSwitchedOut->print();
+	cout << "Switching In Pokemon: " << endl;
+	cout << " ";
+	mSwitchedIn->print();
+	cout << "-------------------------" << endl;
+}
 
 /* ----------------------------------------------------------------
  *
@@ -599,15 +709,15 @@ Flee::Flee(BattleOverview& battle, bool isPlayer) : Action(battle, isPlayer) {
 //}
 
 int Flee::attemptEscape() {
-	int playerSpd = getBattleRef().getPlayerPokemon()->getStat(SPD);
-	int wildSpd = getBattleRef().getOpponentPokemon()->getStat(SPD);
+	int fleeSpd = getBattleRef().getPokemon(isPlayerAction())->getStat(SPD);
+	int chaseSpd = getBattleRef().getPokemon(!isPlayerAction())->getStat(SPD);
 
-	if (playerSpd > wildSpd) {
+	if (fleeSpd >= chaseSpd) {
 		cout << "Escaped from battle!" << endl;
 		return 1;
 	}
 
-	int escapeOdds = (((playerSpd * 128) / wildSpd) + 30 * getBattleRef().getEscapeAttempts()) % 256;
+	int escapeOdds = (((fleeSpd * 128) / chaseSpd) + 30 * getBattleRef().getEscapeAttempts()) % 256;
 	int escapeVal = rand() % 256;
 
 	if (escapeOdds > escapeVal) {
@@ -624,7 +734,17 @@ void Flee::execute() {
 	setParameter(attemptEscape());
 }
 
-
+void Flee::print() {
+	cout << "-------------------------" << endl;
+	cout << "Flee Action" << endl;
+	if (getParameter() > 0) {
+		cout << "   Success" << endl;
+	}
+	else {
+		cout << "   Failure" << endl;
+	}
+	cout << "-------------------------" << endl;
+}
 
 
 

@@ -27,6 +27,7 @@ public:
 
 	// prints species information
 	void print();
+	void printVerbose();
 
 	// gets species name
 	string getSpecies();

@@ -31,6 +31,7 @@ public:
 	Category getCategory();
 
 	void print();
+	void printVerbose();
 
 
 private:
