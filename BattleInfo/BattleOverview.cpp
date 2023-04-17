@@ -3,6 +3,7 @@
 #include <cstdlib>
 #include <math.h>
 #include <vector>
+#include <algorithm>
 
 #include "BattleOverview.h"
 #include "../MiscInfo/TypeInteractions.h"
@@ -201,6 +202,8 @@ void BattleOverview::deleteActionChain() {
 bool BattleOverview::attackOrder(Fight* playerAction, Fight* opponentAction) {
 	int playerPriority = playerAction->getPriority();
 	int opponentPriority = opponentAction->getPriority();
+	cout << "Player Priority: " << playerPriority << endl;
+	cout << "Opponent Priority: " << opponentPriority << endl;
 	if (playerPriority > opponentPriority) {
 		return true;
 	}
@@ -501,6 +504,18 @@ Fight::Fight(BattleOverview& battle, bool isPlayer, Move* move) : Action(battle,
 	}
 }
 
+Pokemon* Fight::getAttacker() {
+	return mAttacker;
+}
+
+Pokemon* Fight::getDefender() {
+	return mDefender;
+}
+
+Move* Fight::getMove() {
+	return mMove;
+}
+
 int Fight::getPriority() {
 	return mMove->getPriority(); 
 }
@@ -640,6 +655,54 @@ double Fight::calcDamage(double crit) {
 	return damage;
 }
 
+bool Fight::dealsDirectDamage() {
+	vector<string> moveList = { "Bide", "Counter", "Dragon Rage", "Mirror Coat", "Night Shade", "Psywave", "Seismic Toss", "Sonic Boom", "Super Fang" };
+	if (find(moveList.begin(), moveList.end(), mMove->getMoveName()) != moveList.end()) {
+		return true;
+	}
+	return false;
+}
+
+int Fight::calcDirectDamage() {
+	string moveName = mMove->getMoveName();
+	if (moveName == "Sonic Boom") {
+		return 20;
+	}
+	if (moveName == "Dragon Rage") {
+		return 40;
+	}
+	if (moveName == "Night Shade" || moveName == "Seismic Toss") {
+		return mAttacker->getLevel();
+	}
+	if (moveName == "Super Fang") {
+		return floor(mDefender->getCurrentHP() / 2);
+	}
+	if (moveName == "Psywave") {
+		return (rand() % (int)round(mAttacker->getLevel() * 1.5)) + 1;
+	}
+	if (moveName == "Counter" || moveName == "Mirror Coat") {
+		Action* lastAction = getBattleRef().getLastAction();
+		if (lastAction->getActionType() == FIGHT) {
+			Fight* lastFight = dynamic_cast<Fight*>(lastAction);
+			if (lastFight->getDefender() != mAttacker) {
+				return 0;
+			}
+			if (moveName == "Counter" && lastFight->getMove()->getCategory() != PHYSICAL) {
+				return 0;
+			}
+			if (moveName == "Mirror Move" && lastFight->getMove()->getCategory() != SPECIAL) {
+				return 0;
+			}
+			return lastFight->getParameter() * 2;
+		}
+		//cout << "Not a fight action" << endl;
+		return 0;
+	}
+	return 0;
+
+
+}
+
 void Fight::doDamage(int damage) {
 	if (damage > mDefender->getCurrentHP()) {
 		damage = mDefender->getCurrentHP();
@@ -664,26 +727,32 @@ void Fight::makeAttack() {
 	}
 	
 	if (mMove->getCategory() != STATUS) {
-		double damageMultiplier = calcEffectiveness(mMove->getType());
-		if (damageMultiplier == 0) {
-			cout << "It had no effect..." << endl;
-			return;
+		int damage;
+		if (dealsDirectDamage()) {
+			damage = calcDirectDamage();
 		}
-		else if (damageMultiplier > 1) {
-			cout << "It's super effective!" << endl;
-		}
-		else if (damageMultiplier < 1) {
-			cout << "It's not very effective..." << endl;
-		}
-		//cout << "DAMAGE MULTIPLIER: " << damageMultiplier << endl;
+		else {
+			double damageMultiplier = calcEffectiveness(mMove->getType());
+			if (damageMultiplier == 0) {
+				cout << "It had no effect..." << endl;
+				return;
+			}
+			else if (damageMultiplier > 1) {
+				cout << "It's super effective!" << endl;
+			}
+			else if (damageMultiplier < 1) {
+				cout << "It's not very effective..." << endl;
+			}
+			//cout << "DAMAGE MULTIPLIER: " << damageMultiplier << endl;
 
-		double critMultiplier = calcCrit(mMove->getCritRate());
+			double critMultiplier = calcCrit(mMove->getCritRate());
 
-		if (critMultiplier > 1) {
-			cout << "A critical hit!" << endl;
+			if (critMultiplier > 1) {
+				cout << "A critical hit!" << endl;
+			}
+
+			damage = round(calcDamage(critMultiplier) * damageMultiplier);
 		}
-
-		int damage = round(calcDamage(critMultiplier) * damageMultiplier);
 
 		doDamage(damage);
 		cout << "The attack did " << damage << " damage!" << endl;

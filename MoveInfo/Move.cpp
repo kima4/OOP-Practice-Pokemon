@@ -24,6 +24,7 @@ Move::Move(string name) {
 	mBasePP = get<2>(move);
 	mType = get<3>(move);
 	mCategory = get<4>(move);
+	initMoveDetails(name);
 }
 
 void Move::initMoveDetails(string name) {

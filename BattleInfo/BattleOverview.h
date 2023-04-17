@@ -128,9 +128,13 @@ class Fight : public virtual Action {
 public:
 	Fight(BattleOverview& battle, bool isPlayer);
 	Fight(BattleOverview& battle, bool isPlayer, Move* move);
+
+	Pokemon* getAttacker();
+	Pokemon* getDefender();
+	Move* getMove();
+	
 	int getPriority();
 
-	
 	bool selectMove();
 
 	int getAttackerStatChange(Stat stat);
@@ -144,6 +148,9 @@ public:
 	double calcAtkToDef(double crit);
 	double calcSTAB(Type moveType);
 	double calcDamage(double crit);
+
+	bool dealsDirectDamage();
+	int calcDirectDamage();
 	
 	void doDamage(int damage);
 	void makeAttack();

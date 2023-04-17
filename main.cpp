@@ -3,7 +3,7 @@
 
 void TestBattle() {
 	vector<Pokemon*> party1;
-	Pokemon* igglybuff = new Pokemon("Igglybuff", 3);
+	Pokemon* igglybuff = new Pokemon("Hitmonchan", 51);
 	Pokemon* mewtwo = new Pokemon("Mewtwo", 4);
 	Pokemon* jolteon = new Pokemon("Jolteon", 32);
 	party1.push_back(igglybuff);
@@ -11,7 +11,7 @@ void TestBattle() {
 	party1.push_back(jolteon);
 	Trainer* trainer1 = new Trainer("Suzzane", party1);
 
-	Pokemon* tyranitar = new Pokemon("Tyranitar", 55);
+	Pokemon* tyranitar = new Pokemon("Zapdos", 33);
 
 	BattleOverview* battle = new BattleOverview(trainer1, tyranitar);
 	battle->battle();
