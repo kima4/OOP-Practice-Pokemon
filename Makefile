@@ -1,7 +1,7 @@
 all: pokemon
 
-pokemon: main.o Types.o TypeInteractions.o PokemonSpecies.o Pokemon.o Move.o Trainer.o BattleOverview.o
-	g++ -o pokemon main.o Types.o TypeInteractions.o PokemonSpecies.o Pokemon.o Move.o Trainer.o BattleOverview.o -g
+pokemon: main.o Types.o TypeInteractions.o PokemonSpecies.o Pokemon.o Move.o Trainer.o BattleOverview.o Action.o
+	g++ -o pokemon main.o Types.o TypeInteractions.o PokemonSpecies.o Pokemon.o Move.o Trainer.o BattleOverview.o Action.o -g
 
 main.o: main.cpp
 	g++ -c main.cpp -g
@@ -26,6 +26,9 @@ Trainer.o: TrainerInfo/Trainer.cpp TrainerInfo/Trainer.h
 
 BattleOverview.o: BattleInfo/BattleOverview.cpp BattleInfo/BattleOverview.h
 	g++ -c BattleInfo/BattleOverview.cpp -g
+
+Action.o: BattleInfo/Action.cpp BattleInfo/Action.h
+	g++ -c BattleInfo/Action.cpp -g
 
 clean: 
 	rm -f *.o pokemon
